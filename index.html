@@ -3,12 +3,59 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Brew & Focus</title>
+
+<title>Brew & Focus — Free Pomodoro Timer with Task Tracking</title>
+<meta name="description" content="Brew & Focus is a free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive — no sign-up required."/>
+<meta name="keywords" content="pomodoro timer, focus timer, productivity app, task tracker, free pomodoro, coffee timer, matcha, work timer, study timer, time management"/>
+<meta name="author" content="Brew & Focus"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://brew-focus.com/"/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://brew-focus.com/"/>
+<meta property="og:title" content="Brew & Focus — Free Pomodoro Timer with Task Tracking"/>
+<meta property="og:description" content="A free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive — no sign-up required."/>
+<meta property="og:image" content="https://brew-focus.com/og-image.png"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="Brew & Focus"/>
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:url" content="https://brew-focus.com/"/>
+<meta name="twitter:title" content="Brew & Focus — Free Pomodoro Timer with Task Tracking"/>
+<meta name="twitter:description" content="A free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive — no sign-up required."/>
+<meta name="twitter:image" content="https://brew-focus.com/og-image.png"/>
+
+<!-- Theme & App -->
+<meta name="theme-color" content="#f5f0e8"/>
+<meta name="application-name" content="Brew & Focus"/>
+<meta name="apple-mobile-web-app-title" content="Brew & Focus"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Brew & Focus",
+  "url": "https://brew-focus.com/",
+  "description": "A free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive.",
+  "applicationCategory": "ProductivityApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:#f0ece4;}
-#app-wrap{width:33vw;min-width:380px;padding:2rem 1.5rem;}
+#app-wrap{width:50vw;min-width:420px;padding:2rem 1.5rem;}
 .theme-coffee{--bg:#f5f0e8;--ink:#3b1a1a;--mid:#6b2f2f;--surf:#e8ddd0;}
 .theme-matcha{--bg:#f2f5ee;--ink:#1a2e1a;--mid:#3a5c3a;--surf:#ddebd4;}
 #app{background:var(--bg);padding:1.25rem 1.5rem 1.5rem;font-family:'Courier New',monospace;color:var(--ink);transition:background .4s,color .4s;border-radius:4px;}
@@ -51,11 +98,11 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 .btn:hover{background:var(--mid);color:var(--bg);}
 .btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
 .btn.primary:hover{background:var(--mid);border-color:var(--mid);}
-.shelf{border-top:2px solid var(--ink);background:var(--surf);border-radius:2px;padding:10px 14px 8px;margin-top:1rem;display:flex;align-items:center;justify-content:space-between;}
+.shelf{border-top:2px solid var(--ink);background:var(--surf);border-radius:2px;padding:10px 14px 8px;margin-top:1rem;display:flex;flex-direction:column;gap:8px;}
+.shelf-top{display:flex;align-items:center;justify-content:space-between;}
 .shelf-label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);}
 .mugs-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
-.tasks-section{margin-top:.75rem;border-top:1px solid var(--mid);padding-top:.75rem;}
-.tasks-header{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+.tasks-section{border-top:1px solid var(--mid);padding-top:.75rem;}
 .task-add-row{display:flex;gap:6px;margin-bottom:8px;}
 .task-input{font-family:'Courier New',monospace;font-size:13px;flex:1;border:1px solid var(--mid);background:var(--bg);color:var(--ink);padding:7px 10px;border-radius:2px;outline:none;letter-spacing:.3px;}
 .task-input::placeholder{color:var(--mid);opacity:.6;}
@@ -72,7 +119,9 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 .task-pours-x{font-size:12px;color:var(--mid);font-family:'Courier New',monospace;opacity:.7;}
 .task-pours-input{font-family:'Courier New',monospace;font-size:13px;width:40px;border:1px solid var(--mid);background:var(--bg);color:var(--ink);padding:7px 4px;border-radius:2px;outline:none;text-align:center;}
 .task-pours-input::-webkit-inner-spin-button,.task-pours-input::-webkit-outer-spin-button{opacity:.4;}
-.task-pours-badge{font-size:11px;font-family:'Courier New',monospace;color:var(--mid);letter-spacing:.5px;border:1px solid var(--mid);border-radius:2px;padding:2px 6px;opacity:.65;white-space:nowrap;flex-shrink:0;}
+.task-pours-badge{font-size:11px;font-family:'Courier New',monospace;color:var(--mid);letter-spacing:.5px;border:1px solid var(--mid);border-radius:2px;padding:2px 6px;opacity:.65;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:2px;}
+.task-pours-edit{font-family:'Courier New',monospace;font-size:11px;width:28px;border:none;background:transparent;color:var(--mid);outline:none;text-align:center;padding:0;-moz-appearance:textfield;}
+.task-pours-edit::-webkit-inner-spin-button,.task-pours-edit::-webkit-outer-spin-button{opacity:.4;}
 .current-task-section{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--surf);}
 .current-task-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;}
 .current-task-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:18px;}
@@ -93,10 +142,31 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 .donors-list li{font-size:12px;color:var(--ink);opacity:.75;display:flex;justify-content:space-between;}
 .donors-list li .donor-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:75%;}
 .donors-list li .donor-amt{color:var(--mid);white-space:nowrap;padding-left:8px;}
+.donor-float{position:fixed;font-family:'Courier New',monospace;font-size:15px;letter-spacing:.8px;color:#6b2f2f;pointer-events:none;white-space:nowrap;opacity:0;animation:donorRise var(--dur,5s) ease-out forwards;}
+@keyframes donorRise{0%{opacity:0;transform:translateY(0) translateX(0);}10%{opacity:.65;}50%{transform:translateY(-60px) translateX(4px);}85%{opacity:.4;}100%{opacity:0;transform:translateY(-120px) translateX(-3px);}}
+@media(max-width:600px){
+  body{align-items:flex-start;padding-top:3.5rem;}
+  #app-wrap{width:100%;min-width:unset;padding:.75rem;}
+  #app{padding:1rem;}
+  .donate-btn{top:.75rem;left:.75rem;font-size:11px;padding:5px 10px;letter-spacing:.6px;}
+  .donor-float{display:none;}
+  .brand{font-size:22px;}
+  .timer-display{font-size:52px;}
+  .top-controls{flex-wrap:wrap;gap:6px;}
+  .theme-opt{padding:5px 12px;font-size:12px;}
+  .lang-select{font-size:12px;padding:5px 26px 5px 8px;}
+  .btn{padding:9px 18px;font-size:13px;}
+  .mode-tabs{gap:5px;}
+  .tab{font-size:12px;padding:5px 10px;}
+}
+@media(min-width:601px) and (max-width:1100px){
+  #app-wrap{width:72vw;min-width:380px;}
+  .donor-float{display:none;}
+}
 </style>
 </head>
 <body>
-<a class="donate-btn" href="https://buy.stripe.com/5kQeVd1nqab45n94i23oA00" target="_blank" rel="noopener">♥ Donate me a pour</a>
+<a id="donateBtn" class="donate-btn" href="https://buy.stripe.com/5kQeVd1nqab45n94i23oA00" target="_blank" rel="noopener">♥ Donate me a pour</a>
 <div id="app-wrap">
 <div id="app" class="theme-coffee">
   <div class="top-controls">
@@ -132,21 +202,21 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
       <div class="time-field">
         <span class="time-label" id="timeLabel0"></span>
         <div class="time-input-wrap">
-          <input type="number" class="time-input" id="timeInput0" min="1" max="99" onchange="updateTime(0,this.value)">
+          <input type="number" class="time-input" id="timeInput0" min="1" max="99" value="25" onchange="updateTime(0,this.value)">
           <span class="time-unit" id="timeMins0"></span>
         </div>
       </div>
       <div class="time-field">
         <span class="time-label" id="timeLabel1"></span>
         <div class="time-input-wrap">
-          <input type="number" class="time-input" id="timeInput1" min="1" max="99" onchange="updateTime(1,this.value)">
+          <input type="number" class="time-input" id="timeInput1" min="1" max="99" value="5" onchange="updateTime(1,this.value)">
           <span class="time-unit" id="timeMins1"></span>
         </div>
       </div>
       <div class="time-field">
         <span class="time-label" id="timeLabel2"></span>
         <div class="time-input-wrap">
-          <input type="number" class="time-input" id="timeInput2" min="1" max="99" onchange="updateTime(2,this.value)">
+          <input type="number" class="time-input" id="timeInput2" min="1" max="99" value="15" onchange="updateTime(2,this.value)">
           <span class="time-unit" id="timeMins2"></span>
         </div>
       </div>
@@ -175,29 +245,27 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
     <button class="btn" id="resetBtn" onclick="resetTimer()"></button>
   </div>
   <div class="shelf">
-    <div class="shelf-label" id="lblToday"></div>
-    <div class="mugs-row" id="mugsRow"></div>
-  </div>
-  <div class="tasks-section">
-    <div class="tasks-header" id="lblTasks"></div>
-    <div class="current-task-section">
-      <div class="current-task-label" id="lblCurrentTask"></div>
-      <div class="current-task-row" id="currentTaskRow"></div>
+    <div class="shelf-top">
+      <div class="shelf-label" id="lblToday"></div>
+      <div class="mugs-row" id="mugsRow"></div>
     </div>
-    <div class="task-add-row">
-      <input type="text" class="task-input" id="taskInput" onkeydown="if(event.key==='Enter')addTask()">
-      <div class="task-pours-wrap">
-        <span class="task-pours-x">×</span>
-        <input type="number" class="task-pours-input" id="poursInput" min="1" max="99" value="1">
+    <div class="tasks-section">
+      <div class="current-task-section">
+        <div class="current-task-label" id="lblCurrentTask"></div>
+        <div class="current-task-row" id="currentTaskRow"></div>
       </div>
-      <button class="task-add-btn" id="addBtn" onclick="addTask()"></button>
+      <div class="task-add-row">
+        <input type="text" class="task-input" id="taskInput" onkeydown="if(event.key==='Enter')addTask()">
+        <div class="task-pours-wrap">
+          <span class="task-pours-x">×</span>
+          <input type="number" class="task-pours-input" id="poursInput" min="1" max="99" value="1">
+        </div>
+        <button class="task-add-btn" id="addBtn" onclick="addTask()"></button>
+      </div>
+      <ul class="task-list" id="taskList"></ul>
     </div>
-    <ul class="task-list" id="taskList"></ul>
   </div>
-  <div class="donors-section">
-    <div class="donors-header" id="lblSupporters"></div>
-    <ul class="donors-list" id="donorsList"></ul>
-  </div>
+
 </div>
 </div>
 
@@ -242,31 +310,31 @@ const THEMES={
 };
 
 const EXTRA={
-  en:{ct:'Current task',nt:'• no task selected •',sup:'Supporters'},
-  zh:{ct:'当前任务',nt:'• 未选择任务 •',sup:'支持者'},
-  hi:{ct:'वर्तमान कार्य',nt:'• कोई कार्य नहीं •',sup:'समर्थक'},
-  es:{ct:'Tarea actual',nt:'• sin tarea •',sup:'Colaboradores'},
-  fr:{ct:'Tâche en cours',nt:'• aucune tâche •',sup:'Contributeurs'},
-  ar:{ct:'المهمة الحالية',nt:'• لا توجد مهمة •',sup:'الداعمون'},
-  bn:{ct:'বর্তমান কাজ',nt:'• কোনো কাজ নেই •',sup:'সমর্থকরা'},
-  pt:{ct:'Tarefa atual',nt:'• nenhuma tarefa •',sup:'Apoiadores'},
-  ru:{ct:'Текущая задача',nt:'• задача не выбрана •',sup:'Поддержавшие'},
-  ja:{ct:'現在のタスク',nt:'• タスク未選択 •',sup:'サポーター'},
-  de:{ct:'Aktuelle Aufgabe',nt:'• keine Aufgabe •',sup:'Unterstützer'},
-  ko:{ct:'현재 할 일',nt:'• 선택 없음 •',sup:'후원자'},
-  tr:{ct:'Mevcut görev',nt:'• görev yok •',sup:'Destekçiler'},
-  vi:{ct:'Nhiệm vụ hiện tại',nt:'• chưa chọn •',sup:'Người ủng hộ'},
-  it:{ct:'Attività corrente',nt:'• nessuna attività •',sup:'Sostenitori'},
-  fa:{ct:'وظیفه فعلی',nt:'• وظیفه‌ای انتخاب نشده •',sup:'حامیان'},
-  pl:{ct:'Bieżące zadanie',nt:'• brak zadania •',sup:'Wspierający'},
-  uk:{ct:'Поточне завдання',nt:'• не вибрано •',sup:'Прихильники'},
-  nl:{ct:'Huidige taak',nt:'• geen taak •',sup:'Donateurs'},
-  th:{ct:'งานปัจจุบัน',nt:'• ยังไม่เลือก •',sup:'ผู้สนับสนุน'},
-  ms:{ct:'Tugasan semasa',nt:'• tiada tugasan •',sup:'Penyokong'},
-  id:{ct:'Tugas saat ini',nt:'• belum dipilih •',sup:'Pendukung'},
-  sv:{ct:'Aktuell uppgift',nt:'• ingen uppgift •',sup:'Supportrar'},
-  sw:{ct:'Kazi ya sasa',nt:'• hakuna kazi •',sup:'Wafadhili'},
-  ro:{ct:'Sarcina curentă',nt:'• nicio sarcină •',sup:'Susținători'}
+  en:{ct:'Current task',nt:'• no task selected •',sup:'Supporters',donate:'♥ Donate me a pour'},
+  zh:{ct:'当前任务',nt:'• 未选择任务 •',sup:'支持者',donate:'♥ 请我喝一杯'},
+  hi:{ct:'वर्तमान कार्य',nt:'• कोई कार्य नहीं •',sup:'समर्थक',donate:'♥ एक कप दान करें'},
+  es:{ct:'Tarea actual',nt:'• sin tarea •',sup:'Colaboradores',donate:'♥ Invítame a un café'},
+  fr:{ct:'Tâche en cours',nt:'• aucune tâche •',sup:'Contributeurs',donate:'♥ Offre-moi un café'},
+  ar:{ct:'المهمة الحالية',nt:'• لا توجد مهمة •',sup:'الداعمون',donate:'♥ تبرع لي بكوب'},
+  bn:{ct:'বর্তমান কাজ',nt:'• কোনো কাজ নেই •',sup:'সমর্থকরা',donate:'♥ আমাকে একটি কাপ দিন'},
+  pt:{ct:'Tarefa atual',nt:'• nenhuma tarefa •',sup:'Apoiadores',donate:'♥ Me pague um café'},
+  ru:{ct:'Текущая задача',nt:'• задача не выбрана •',sup:'Поддержавшие',donate:'♥ Угостите меня кофе'},
+  ja:{ct:'現在のタスク',nt:'• タスク未選択 •',sup:'サポーター',donate:'♥ コーヒーをおごって'},
+  de:{ct:'Aktuelle Aufgabe',nt:'• keine Aufgabe •',sup:'Unterstützer',donate:'♥ Spendier mir einen Kaffee'},
+  ko:{ct:'현재 할 일',nt:'• 선택 없음 •',sup:'후원자',donate:'♥ 커피 한 잔 부탁해요'},
+  tr:{ct:'Mevcut görev',nt:'• görev yok •',sup:'Destekçiler',donate:'♥ Bana bir fincan ısmarla'},
+  vi:{ct:'Nhiệm vụ hiện tại',nt:'• chưa chọn •',sup:'Người ủng hộ',donate:'♥ Mời tôi một ly'},
+  it:{ct:'Attività corrente',nt:'• nessuna attività •',sup:'Sostenitori',donate:'♥ Offrimi un caffè'},
+  fa:{ct:'وظیفه فعلی',nt:'• وظیفه‌ای انتخاب نشده •',sup:'حامیان',donate:'♥ برایم یک فنجان بریز'},
+  pl:{ct:'Bieżące zadanie',nt:'• brak zadania •',sup:'Wspierający',donate:'♥ Postaw mi kawę'},
+  uk:{ct:'Поточне завдання',nt:'• не вибрано •',sup:'Прихильники',donate:'♥ Пригости мене кавою'},
+  nl:{ct:'Huidige taak',nt:'• geen taak •',sup:'Donateurs',donate:'♥ Trakteer me op een kop'},
+  th:{ct:'งานปัจจุบัน',nt:'• ยังไม่เลือก •',sup:'ผู้สนับสนุน',donate:'♥ เลี้ยงกาแฟฉันหน่อย'},
+  ms:{ct:'Tugasan semasa',nt:'• tiada tugasan •',sup:'Penyokong',donate:'♥ Belanja saya secawan'},
+  id:{ct:'Tugas saat ini',nt:'• belum dipilih •',sup:'Pendukung',donate:'♥ Belikan saya secangkir'},
+  sv:{ct:'Aktuell uppgift',nt:'• ingen uppgift •',sup:'Supportrar',donate:'♥ Bjud mig på en kopp'},
+  sw:{ct:'Kazi ya sasa',nt:'• hakuna kazi •',sup:'Wafadhili',donate:'♥ Nipe kikombe kimoja'},
+  ro:{ct:'Sarcina curentă',nt:'• nicio sarcină •',sup:'Susținători',donate:'♥ Oferă-mi o ceașcă'}
 };
 
 const WORKER_URL='https://brew-focus-donors.brew-focus.workers.dev';
@@ -349,11 +417,12 @@ function applyLang(){
   document.getElementById('modeLabel').textContent=l.modes[modeIdx];
   document.getElementById('resetBtn').textContent=l.reset;
   document.getElementById('startBtn').textContent=running?l.pause:l.start;
-  document.getElementById('lblTasks').textContent=u.tasks;
+
   document.getElementById('taskInput').placeholder=u.addTask;
   document.getElementById('addBtn').textContent=u.add;
   document.getElementById('lblCurrentTask').textContent=XU().ct;
-  document.getElementById('lblSupporters').textContent=XU().sup;
+
+  document.getElementById('donateBtn').textContent=XU().donate;
   if(!running&&remaining===totalSecs())document.getElementById('timerMsg').textContent=l.ready;
   renderCurrentTask();
 }
@@ -490,9 +559,14 @@ function renderTasks(){
     li.className='task-item';
     const isCurrent=currentTaskIdx===i;
     const done=t.completedPours||0;
-    li.innerHTML=`<input type="checkbox" class="task-check"${t.done?' checked':''} onchange="toggleTask(${i})"><span class="task-text${t.done?' done':''}">${escHtml(t.text)}</span><span class="task-pours-badge">${done} / ${t.pours||1}</span><button class="task-set-btn${isCurrent?' active':''}" onclick="setCurrentTask(${i})" title="Set as current">▶</button><button class="task-del" onclick="deleteTask(${i})">×</button>`;
+    li.innerHTML=`<input type="checkbox" class="task-check"${t.done?' checked':''} onchange="toggleTask(${i})"><span class="task-text${t.done?' done':''}">${escHtml(t.text)}</span><span class="task-pours-badge">${done} / <input type="number" class="task-pours-edit" value="${t.pours||1}" min="1" max="99" onchange="updateTaskPours(${i},this.value)" onclick="event.stopPropagation()"></span><button class="task-set-btn${isCurrent?' active':''}" onclick="setCurrentTask(${i})" title="Set as current">▶</button><button class="task-del" onclick="deleteTask(${i})">×</button>`;
     ul.appendChild(li);
   });
+}
+
+function updateTaskPours(i,val){
+  tasks[i].pours=Math.max(1,Math.min(99,parseInt(val)||1));
+  renderCurrentTask();saveState();
 }
 
 function addTask(){
@@ -518,20 +592,51 @@ function deleteTask(i){
   renderCurrentTask();renderTasks();saveState();
 }
 
+const DUMMY_DONORS=[
+  {name:'Maria G.',amount:'3.00',currency:'USD'},
+  {name:'Tomás R.',amount:'5.00',currency:'USD'},
+  {name:'Sarah K.',amount:'2.00',currency:'USD'},
+  {name:'Li Wei',amount:'5.00',currency:'USD'},
+  {name:'Alex P.',amount:'3.00',currency:'USD'}
+];
+
+function startDonorFloats(names){
+  if(!names||names.length===0)return;
+  function spawn(){
+    const d=names[Math.floor(Math.random()*names.length)];
+    const el=document.createElement('div');
+    el.className='donor-float';
+    el.textContent='♥ '+d.name;
+    const vw=window.innerWidth;
+    const wrap=document.getElementById('app-wrap');
+    const rect=wrap.getBoundingClientRect();
+    const side=Math.random()<.5?'left':'right';
+    let x;
+    if(side==='left'){
+      x=20+Math.random()*Math.max(0,rect.left-80);
+    } else {
+      x=rect.right+20+Math.random()*Math.max(0,vw-rect.right-100);
+    }
+    const startY=window.innerHeight*(0.55+Math.random()*0.35);
+    const dur=(4+Math.random()*3).toFixed(1)+'s';
+    el.style.cssText=`left:${x}px;top:${startY}px;--dur:${dur}`;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+    setTimeout(spawn,1200+Math.random()*2800);
+  }
+  setTimeout(spawn,300+Math.random()*1500);
+}
+
 async function loadDonors(){
-  if(!WORKER_URL||WORKER_URL==='YOUR_WORKER_URL')return;
+  if(!WORKER_URL||WORKER_URL==='YOUR_WORKER_URL'){
+    startDonorFloats(DUMMY_DONORS);return;
+  }
   try{
     const res=await fetch(WORKER_URL+'/donors');
-    if(!res.ok)return;
+    if(!res.ok){startDonorFloats(DUMMY_DONORS);return;}
     const donors=await res.json();
-    const list=document.getElementById('donorsList');
-    list.innerHTML='';
-    donors.slice(0,10).forEach(d=>{
-      const li=document.createElement('li');
-      li.innerHTML=`<span class="donor-name">${escHtml(d.name)}</span><span class="donor-amt">${escHtml(d.currency)} ${escHtml(d.amount)}</span>`;
-      list.appendChild(li);
-    });
-  }catch(_){}
+    startDonorFloats(donors.length>0?donors:DUMMY_DONORS);
+  }catch(_){startDonorFloats(DUMMY_DONORS);}
 }
 
 // Init
