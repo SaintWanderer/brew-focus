@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Brew & Focus</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:#f0ece4;}
+#app-wrap{width:33vw;min-width:380px;padding:2rem 1.5rem;}
+.theme-coffee{--bg:#f5f0e8;--ink:#3b1a1a;--mid:#6b2f2f;--surf:#e8ddd0;}
+.theme-matcha{--bg:#f2f5ee;--ink:#1a2e1a;--mid:#3a5c3a;--surf:#ddebd4;}
+#app{background:var(--bg);padding:1.25rem 1.5rem 1.5rem;font-family:'Courier New',monospace;color:var(--ink);transition:background .4s,color .4s;border-radius:4px;}
+.top-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:10px;}
+.theme-pill{display:flex;gap:4px;flex-shrink:0;}
+.donate-btn{position:fixed;top:1.5rem;left:1.5rem;display:inline-block;font-family:'Courier New',monospace;font-size:12px;letter-spacing:.9px;text-transform:uppercase;padding:6px 16px;color:#6b2f2f;border:1px solid #6b2f2f;border-radius:3px;background:#f5f0e8;text-decoration:none;transition:background .2s,color .2s;white-space:nowrap;cursor:pointer;z-index:100;}
+.donate-btn:hover{background:#6b2f2f;color:#f5f0e8;}
+.theme-opt{font-family:'Courier New',monospace;font-size:13px;letter-spacing:.8px;text-transform:uppercase;padding:6px 18px;cursor:pointer;background:transparent;color:var(--mid);border:1px solid var(--mid);border-radius:3px;transition:background .2s,color .2s;}
+.theme-opt.active{background:var(--mid);color:var(--bg);}
+.lang-select-wrap{position:relative;flex-shrink:0;}
+.lang-select{font-family:'Courier New',monospace;font-size:13px;letter-spacing:.5px;padding:6px 30px 6px 12px;border:1px solid var(--mid);border-radius:3px;background:var(--bg);color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:background .3s,color .3s;}
+.lang-select:hover{background:var(--surf);}
+.lang-arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--mid);}
+.top-bar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem;}
+.brand{font-family:'Special Elite',serif;font-size:28px;color:var(--ink);letter-spacing:-.5px;}
+.subtitle{font-size:13px;color:var(--mid);margin-top:2px;text-transform:uppercase;letter-spacing:1.5px;}
+.session-label{font-size:13px;color:var(--mid);text-align:right;letter-spacing:1px;text-transform:uppercase;}
+.session-count{font-size:22px;font-weight:500;color:var(--ink);text-align:right;}
+.mode-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:.5rem;}
+.mode-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.tab{font-family:'Courier New',monospace;font-size:13px;letter-spacing:.5px;text-transform:uppercase;padding:6px 16px;border-radius:2px;border:1px solid transparent;cursor:pointer;color:var(--mid);background:transparent;transition:all .15s;}
+.tab.active{border-color:var(--mid);background:var(--surf);}
+.settings-btn{background:transparent;border:none;cursor:pointer;color:var(--mid);font-size:18px;padding:3px 5px;opacity:.55;line-height:1;transition:opacity .15s;}
+.settings-btn:hover,.settings-btn.open{opacity:1;color:var(--ink);}
+.settings-panel{background:var(--surf);border:1px solid var(--mid);border-radius:3px;padding:10px 14px;margin-bottom:.75rem;display:none;}
+.settings-panel.open{display:block;}
+.time-fields{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.time-field{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.time-label{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);}
+.time-input-wrap{display:flex;align-items:center;gap:4px;}
+.time-input{font-family:'Courier New',monospace;font-size:15px;width:52px;padding:4px 6px;border:1px solid var(--mid);border-radius:2px;background:var(--bg);color:var(--ink);text-align:center;outline:none;}
+.time-input::-webkit-inner-spin-button,.time-input::-webkit-outer-spin-button{opacity:.4;}
+.time-unit{font-size:10px;letter-spacing:.5px;color:var(--mid);text-transform:uppercase;}
+.counter-area{display:flex;flex-direction:column;align-items:center;margin:.25rem 0 1rem;}
+.timer-display{font-family:'Special Elite',serif;font-size:64px;color:var(--ink);letter-spacing:2px;line-height:1;}
+.mode-label{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--mid);margin-top:8px;}
+.message{font-size:13px;letter-spacing:1.5px;color:var(--mid);text-align:center;text-transform:uppercase;margin-top:8px;min-height:18px;}
+.controls{display:flex;gap:10px;margin-top:.75rem;justify-content:center;}
+.btn{border:1px solid var(--mid);background:transparent;color:var(--mid);font-family:'Courier New',monospace;font-size:14px;padding:10px 26px;border-radius:2px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:background .15s,color .15s;}
+.btn:hover{background:var(--mid);color:var(--bg);}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+.btn.primary:hover{background:var(--mid);border-color:var(--mid);}
+.shelf{border-top:2px solid var(--ink);background:var(--surf);border-radius:2px;padding:10px 14px 8px;margin-top:1rem;display:flex;align-items:center;justify-content:space-between;}
+.shelf-label{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);}
+.mugs-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.tasks-section{margin-top:.75rem;border-top:1px solid var(--mid);padding-top:.75rem;}
+.tasks-header{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+.task-add-row{display:flex;gap:6px;margin-bottom:8px;}
+.task-input{font-family:'Courier New',monospace;font-size:13px;flex:1;border:1px solid var(--mid);background:var(--bg);color:var(--ink);padding:7px 10px;border-radius:2px;outline:none;letter-spacing:.3px;}
+.task-input::placeholder{color:var(--mid);opacity:.6;}
+.task-add-btn{font-family:'Courier New',monospace;font-size:13px;padding:7px 16px;border:1px solid var(--mid);background:transparent;color:var(--mid);border-radius:2px;cursor:pointer;letter-spacing:.8px;text-transform:uppercase;transition:background .15s,color .15s;white-space:nowrap;}
+.task-add-btn:hover{background:var(--mid);color:var(--bg);}
+.task-list{list-style:none;display:flex;flex-direction:column;gap:5px;}
+.task-item{display:flex;align-items:center;gap:8px;}
+.task-check{accent-color:var(--mid);cursor:pointer;width:13px;height:13px;flex-shrink:0;}
+.task-text{flex:1;font-size:13px;font-family:'Courier New',monospace;letter-spacing:.5px;text-transform:uppercase;color:var(--ink);}
+.task-text.done{text-decoration:line-through;opacity:.38;}
+.task-del{background:transparent;border:none;color:var(--mid);cursor:pointer;font-size:16px;padding:0 2px;opacity:.4;line-height:1;transition:opacity .15s;}
+.task-del:hover{opacity:1;}
+.task-pours-wrap{display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.task-pours-x{font-size:12px;color:var(--mid);font-family:'Courier New',monospace;opacity:.7;}
+.task-pours-input{font-family:'Courier New',monospace;font-size:13px;width:40px;border:1px solid var(--mid);background:var(--bg);color:var(--ink);padding:7px 4px;border-radius:2px;outline:none;text-align:center;}
+.task-pours-input::-webkit-inner-spin-button,.task-pours-input::-webkit-outer-spin-button{opacity:.4;}
+.task-pours-badge{font-size:11px;font-family:'Courier New',monospace;color:var(--mid);letter-spacing:.5px;border:1px solid var(--mid);border-radius:2px;padding:2px 6px;opacity:.65;white-space:nowrap;flex-shrink:0;}
+.current-task-section{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--surf);}
+.current-task-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;}
+.current-task-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:18px;}
+.current-task-name{font-size:13px;font-family:'Courier New',monospace;letter-spacing:.5px;text-transform:uppercase;color:var(--ink);flex:1;}
+.current-task-name.empty{color:var(--mid);opacity:.45;letter-spacing:1.5px;}
+.current-task-counter{font-size:12px;font-family:'Courier New',monospace;color:var(--mid);letter-spacing:.5px;flex-shrink:0;}
+.task-set-btn{background:transparent;border:none;cursor:pointer;color:var(--mid);font-size:13px;padding:0 3px;opacity:.35;line-height:1;transition:opacity .15s,color .15s;flex-shrink:0;}
+.task-set-btn:hover{opacity:.8;}
+.task-set-btn.active{opacity:1;color:var(--ink);}
+.steam-path{animation:steamUp 2s ease-in-out infinite;transform-origin:bottom center;}
+@keyframes steamUp{0%,100%{opacity:.3;transform:translateY(0);}50%{opacity:.85;transform:translateY(-5px);}}
+.ring-bg{fill:none;stroke-width:5;}
+.ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.liquid-anim{transition:height 1s linear,y 1s linear;}
+.donors-section{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--surf);}
+.donors-header{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+.donors-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;}
+.donors-list li{font-size:12px;color:var(--ink);opacity:.75;display:flex;justify-content:space-between;}
+.donors-list li .donor-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:75%;}
+.donors-list li .donor-amt{color:var(--mid);white-space:nowrap;padding-left:8px;}
+</style>
+</head>
+<body>
+<a class="donate-btn" href="YOUR_STRIPE_PAYMENT_LINK" target="_blank" rel="noopener">♥ Donate me a pour</a>
+<div id="app-wrap">
+<div id="app" class="theme-coffee">
+  <div class="top-controls">
+    <div class="theme-pill">
+      <button class="theme-opt active" id="tCoffee" onclick="setTheme('coffee')">Coffee</button>
+      <button class="theme-opt" id="tMatcha" onclick="setTheme('matcha')">Matcha</button>
+    </div>
+    <div class="lang-select-wrap">
+      <select class="lang-select" id="langSelect" onchange="setLang(this.value)"></select>
+      <span class="lang-arrow">▾</span>
+    </div>
+  </div>
+  <div class="top-bar">
+    <div>
+      <div class="brand" id="brandName"></div>
+      <div class="subtitle" id="lblSubtitle"></div>
+    </div>
+    <div>
+      <div class="session-label" id="lblCups"></div>
+      <div class="session-count" id="sessionCount">0</div>
+    </div>
+  </div>
+  <div class="mode-row">
+    <div class="mode-tabs">
+      <button class="tab active" id="tab0" onclick="switchMode(0)"></button>
+      <button class="tab" id="tab1" onclick="switchMode(1)"></button>
+      <button class="tab" id="tab2" onclick="switchMode(2)"></button>
+    </div>
+    <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()" title="Settings">⚙</button>
+  </div>
+  <div class="settings-panel" id="settingsPanel">
+    <div class="time-fields">
+      <div class="time-field">
+        <span class="time-label" id="timeLabel0"></span>
+        <div class="time-input-wrap">
+          <input type="number" class="time-input" id="timeInput0" min="1" max="99" onchange="updateTime(0,this.value)">
+          <span class="time-unit" id="timeMins0"></span>
+        </div>
+      </div>
+      <div class="time-field">
+        <span class="time-label" id="timeLabel1"></span>
+        <div class="time-input-wrap">
+          <input type="number" class="time-input" id="timeInput1" min="1" max="99" onchange="updateTime(1,this.value)">
+          <span class="time-unit" id="timeMins1"></span>
+        </div>
+      </div>
+      <div class="time-field">
+        <span class="time-label" id="timeLabel2"></span>
+        <div class="time-input-wrap">
+          <input type="number" class="time-input" id="timeInput2" min="1" max="99" onchange="updateTime(2,this.value)">
+          <span class="time-unit" id="timeMins2"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="counter-area">
+    <div style="position:relative;width:220px;height:220px;margin-bottom:.5rem;">
+      <svg viewBox="0 0 160 160" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="vClip"><path id="vClipPath" d=""/></clipPath></defs>
+        <circle id="ringBg" class="ring-bg" cx="80" cy="80" r="68"/>
+        <circle id="ringFill" class="ring-fill" cx="80" cy="80" r="68" stroke-dasharray="427" stroke-dashoffset="427" style="transform:rotate(-90deg);transform-origin:80px 80px;"/>
+        <g id="steamGroup" opacity="0">
+          <path class="steam-path" id="s1" d="M62 56 Q65 48 62 40" fill="none" stroke-width="2" stroke-linecap="round" style="animation-delay:0s"/>
+          <path class="steam-path" id="s2" d="M80 52 Q83 44 80 36" fill="none" stroke-width="2" stroke-linecap="round" style="animation-delay:.4s"/>
+          <path class="steam-path" id="s3" d="M98 56 Q101 48 98 40" fill="none" stroke-width="2" stroke-linecap="round" style="animation-delay:.8s"/>
+        </g>
+        <g id="vesselBody"></g>
+      </svg>
+    </div>
+    <div class="timer-display" id="timerDisplay">25:00</div>
+    <div class="mode-label" id="modeLabel"></div>
+    <div class="message" id="timerMsg"></div>
+  </div>
+  <div class="controls">
+    <button class="btn primary" id="startBtn" onclick="toggleTimer()"></button>
+    <button class="btn" id="resetBtn" onclick="resetTimer()"></button>
+  </div>
+  <div class="shelf">
+    <div class="shelf-label" id="lblToday"></div>
+    <div class="mugs-row" id="mugsRow"></div>
+  </div>
+  <div class="tasks-section">
+    <div class="tasks-header" id="lblTasks"></div>
+    <div class="current-task-section">
+      <div class="current-task-label" id="lblCurrentTask"></div>
+      <div class="current-task-row" id="currentTaskRow"></div>
+    </div>
+    <div class="task-add-row">
+      <input type="text" class="task-input" id="taskInput" onkeydown="if(event.key==='Enter')addTask()">
+      <div class="task-pours-wrap">
+        <span class="task-pours-x">×</span>
+        <input type="number" class="task-pours-input" id="poursInput" min="1" max="99" value="1">
+      </div>
+      <button class="task-add-btn" id="addBtn" onclick="addTask()"></button>
+    </div>
+    <ul class="task-list" id="taskList"></ul>
+  </div>
+  <div class="donors-section">
+    <div class="donors-header" id="lblSupporters"></div>
+    <ul class="donors-list" id="donorsList"></ul>
+  </div>
+</div>
+</div>
+
+<script>
+const LANGS=[
+  {code:'en',label:'🇬🇧 English',tasks:'Tasks',addTask:'Add a task…',add:'Add',mins:'min',coffee:{brand:'Brew & Focus',sub:'• each session is a pour',cups:'Cups poured',today:"Today's cups",tabs:['Espresso (25m)','Short drip (5m)','Cold brew (15m)'],modes:['Espresso shot','Drip break','Cold brew rest'],start:'Start brewing',pause:'Pause',reset:'Reset',ready:'• ready to brew •',paused:'• paused •',done:'• cup is ready! •',msgs:{0:['• grinding beans •','• water heating •','• nearly there •','• almost done •'],1:['• sip and breathe •','• stretch a little •','• back soon •'],2:['• patience now •','• steeping slowly •','• almost ready •']}},matcha:{brand:'Whisk & Stillness',sub:'• each session is a bowl',cups:'Bowls whisked',today:"Today's bowls",tabs:['Ceremony (25m)','Sip pause (5m)','Rest (15m)'],modes:['Ceremonial bowl','Sip pause','Resting mind'],start:'Begin ceremony',pause:'Pause',reset:'Reset',ready:'• ready to whisk •',paused:'• paused — stillness •',done:'• bowl is ready! •',msgs:{0:['• sifting matcha •','• water at 80°C •','• whisking steady •','• almost there •'],1:['• rest your hands •','• breathe deeply •','• return slowly •'],2:['• stillness holds •','• let thoughts steep •','• nearly done •']}}},
+  {code:'zh',label:'🇨🇳 中文',tasks:'任务',addTask:'添加任务…',add:'添加',mins:'分',coffee:{brand:'专注时光',sub:'• 每次专注都是一次冲泡',cups:'已冲泡杯数',today:'今日杯数',tabs:['浓缩（25分）','短休（5分）','冷萃（15分）'],modes:['浓缩咖啡','短暂休息','冷萃休息'],start:'开始冲泡',pause:'暂停',reset:'重置',ready:'• 准备冲泡 •',paused:'• 已暂停 •',done:'• 咖啡好了！•',msgs:{0:['• 研磨咖啡豆 •','• 水正在加热 •','• 快好了 •','• 即将完成 •'],1:['• 享受咖啡 •','• 深呼吸 •','• 很快回来 •'],2:['• 冷萃需耐心 •','• 正在浸泡 •','• 快好了 •']}},matcha:{brand:'抹茶与静心',sub:'• 每次专注都是一碗',cups:'已点碗数',today:'今日碗数',tabs:['茶道（25分）','小憩（5分）','休息（15分）'],modes:['茶道之碗','小憩','静心'],start:'开始茶道',pause:'暂停',reset:'重置',ready:'• 准备点茶 •',paused:'• 已暂停 •',done:'• 抹茶备好！•',msgs:{0:['• 过筛抹茶 •','• 水温80°C •','• 稳定打泡 •','• 快完成了 •'],1:['• 放松双手 •','• 深呼吸 •','• 缓缓归来 •'],2:['• 保持静心 •','• 让思绪沉淀 •','• 快完成了 •']}}},
+  {code:'hi',label:'🇮🇳 हिन्दी',tasks:'कार्य',addTask:'कार्य जोड़ें…',add:'जोड़ें',mins:'मि',coffee:{brand:'Brew & Focus',sub:'• हर सत्र एक कप है',cups:'बनाए गए कप',today:'आज के कप',tabs:['एस्प्रेसो (25मि)','छोटा विराम (5मि)','कोल्ड ब्रू (15मि)'],modes:['एस्प्रेसो शॉट','छोटा विराम','कोल्ड ब्रू विराम'],start:'शुरू करें',pause:'रोकें',reset:'रीसेट',ready:'• तैयार है •',paused:'• रुका हुआ है •',done:'• कप तैयार! •',msgs:{0:['• बीन्स पीस रहे हैं •','• पानी गर्म हो रहा है •','• लगभग तैयार •','• बस थोड़ा और •'],1:['• एक घूंट लें •','• खिंचाव करें •','• जल्दी वापस •'],2:['• धैर्य रखें •','• भिगोने दें •','• लगभग तैयार •']}},matcha:{brand:'माचा & शांति',sub:'• हर सत्र एक कटोरी है',cups:'बनाई गई कटोरियाँ',today:'आज की कटोरियाँ',tabs:['समारोह (25मि)','विराम (5मि)','आराम (15मि)'],modes:['समारोह कटोरी','विराम','मन को आराम'],start:'समारोह शुरू करें',pause:'रोकें',reset:'रीसेट',ready:'• फेंटने के लिए तैयार •',paused:'• रुका — शांति •',done:'• कटोरी तैयार! •',msgs:{0:['• माचा छान रहे हैं •','• पानी 80°C •','• स्थिर फेंटें •','• लगभग तैयार •'],1:['• हाथों को आराम •','• गहरी सांस लें •','• धीरे वापस •'],2:['• शांति बनाए रखें •','• विचार थिर हों •','• लगभग तैयार •']}}},
+  {code:'es',label:'🇪🇸 Español',tasks:'Tareas',addTask:'Añadir tarea…',add:'Añadir',mins:'min',coffee:{brand:'Brew & Focus',sub:'• cada sesión es un vertido',cups:'Tazas servidas',today:'Tazas de hoy',tabs:['Espresso (25m)','Pausa corta (5m)','Frío largo (15m)'],modes:['Tiro de espresso','Pausa rápida','Descanso frío'],start:'Empezar',pause:'Pausar',reset:'Reiniciar',ready:'• listo para preparar •',paused:'• en pausa •',done:'• ¡taza lista! •',msgs:{0:['• moliendo granos •','• agua calentando •','• casi listo •','• un momento más •'],1:['• disfruta el sorbo •','• estírate un poco •','• volvemos pronto •'],2:['• paciencia •','• reposando •','• casi listo •']}},matcha:{brand:'Batir & Calma',sub:'• cada sesión es un cuenco',cups:'Cuencos batidos',today:'Cuencos de hoy',tabs:['Ceremonia (25m)','Pausa (5m)','Descanso (15m)'],modes:['Cuenco ceremonial','Pausa serena','Mente en reposo'],start:'Iniciar ceremonia',pause:'Pausar',reset:'Reiniciar',ready:'• listo para batir •',paused:'• en pausa — quietud •',done:'• ¡cuenco listo! •',msgs:{0:['• tamizando matcha •','• agua a 80°C •','• batiendo con calma •','• casi listo •'],1:['• descansa las manos •','• respira hondo •','• regresa con calma •'],2:['• quietud presente •','• deja reposar •','• casi terminado •']}}},
+  {code:'fr',label:'🇫🇷 Français',tasks:'Tâches',addTask:'Ajouter une tâche…',add:'Ajouter',mins:'min',coffee:{brand:'Brew & Focus',sub:'• chaque session est une infusion',cups:'Tasses servies',today:"Tasses d'aujourd'hui",tabs:['Espresso (25m)','Courte pause (5m)','Infusion froide (15m)'],modes:["Shot d'espresso",'Pause rapide','Pause froide'],start:'Commencer',pause:'Pause',reset:'Réinitialiser',ready:'• prêt à infuser •',paused:'• en pause •',done:'• la tasse est prête ! •',msgs:{0:['• mouture en cours •','• eau en chauffe •','• presque prêt •','• encore un instant •'],1:['• savourez •','• étirez-vous •','• de retour bientôt •'],2:['• patience •','• en train de reposer •','• presque prêt •']}},matcha:{brand:'Fouet & Sérénité',sub:'• chaque session est un bol',cups:'Bols préparés',today:"Bols d'aujourd'hui",tabs:['Cérémonie (25m)','Pause (5m)','Repos (15m)'],modes:['Bol cérémonial','Pause sereine','Esprit en repos'],start:'Commencer la cérémonie',pause:'Pause',reset:'Réinitialiser',ready:'• prêt à fouetter •',paused:'• en pause — sérénité •',done:'• le bol est prêt ! •',msgs:{0:['• tamisant le matcha •','• eau à 80°C •','• fouettant calmement •','• presque prêt •'],1:['• reposez vos mains •','• respirez profondément •','• revenez doucement •'],2:['• gardez le calme •','• laissez reposer •','• presque terminé •']}}},
+  {code:'ar',label:'🇸🇦 العربية',tasks:'المهام',addTask:'أضف مهمة…',add:'إضافة',mins:'د',coffee:{brand:'تركيز وقهوة',sub:'• كل جلسة هي صبّة',cups:'أكواب مُعدّة',today:'أكواب اليوم',tabs:['إسبريسو (٢٥د)','استراحة قصيرة (٥د)','قهوة باردة (١٥د)'],modes:['جرعة إسبريسو','استراحة سريعة','راحة القهوة الباردة'],start:'ابدأ التحضير',pause:'توقف',reset:'إعادة',ready:'• جاهز للتحضير •',paused:'• متوقف مؤقتاً •',done:'• الكوب جاهز! •',msgs:{0:['• طحن الحبوب •','• تسخين الماء •','• يكاد ينتهي •','• لحظات أخيرة •'],1:['• استمتع بالرشفة •','• تمدد قليلاً •','• نعود قريباً •'],2:['• اصبر قليلاً •','• ينقع ببطء •','• يكاد يكتمل •']}},matcha:{brand:'ماتشا وسكينة',sub:'• كل جلسة هي وعاء',cups:'أوعية مُحضَّرة',today:'أوعية اليوم',tabs:['مراسم (٢٥د)','استراحة (٥د)','راحة (١٥د)'],modes:['وعاء المراسم','استراحة هادئة','راحة الذهن'],start:'ابدأ المراسم',pause:'توقف',reset:'إعادة',ready:'• جاهز للخفق •',paused:'• متوقف — سكينة •',done:'• الوعاء جاهز! •',msgs:{0:['• نخل الماتشا •','• الماء عند ٨٠°م •','• خفق منتظم •','• يكاد ينتهي •'],1:['• أرح يديك •','• تنفس بعمق •','• عد بهدوء •'],2:['• حافظ على الهدوء •','• دع الأفكار تستقر •','• يكاد يكتمل •']}}},
+  {code:'bn',label:'🇧🇩 বাংলা',tasks:'কাজ',addTask:'কাজ যোগ করুন…',add:'যোগ করুন',mins:'মি',coffee:{brand:'Brew & Focus',sub:'• প্রতিটি সেশন একটি কাপ',cups:'বানানো কাপ',today:'আজকের কাপ',tabs:['এস্প্রেসো (২৫মি)','ছোট বিরতি (৫মি)','কোল্ড ব্রু (১৫মি)'],modes:['এস্প্রেসো শট','ছোট বিরতি','কোল্ড ব্রু বিরতি'],start:'শুরু করুন',pause:'থামুন',reset:'রিসেট',ready:'• তৈরি আছি •',paused:'• বিরতিতে •',done:'• কাপ তৈরি! •',msgs:{0:['• বিনস পিষছি •','• জল গরম হচ্ছে •','• প্রায় হয়ে গেছে •','• একটু আর •'],1:['• একটু চুমুক দিন •','• একটু ব্যায়াম •','• শীঘ্রই ফিরব •'],2:['• ধৈর্য ধরুন •','• ভিজছে •','• প্রায় হয়ে গেছে •']}},matcha:{brand:'মাচা ও শান্তি',sub:'• প্রতিটি সেশন একটি বাটি',cups:'বানানো বাটি',today:'আজকের বাটি',tabs:['অনুষ্ঠান (২৫মি)','বিরতি (৫মি)','আরাম (১৫মি)'],modes:['আনুষ্ঠানিক বাটি','বিরতি','মনের আরাম'],start:'অনুষ্ঠান শুরু করুন',pause:'থামুন',reset:'রিসেট',ready:'• ফেটানোর জন্য তৈরি •',paused:'• বিরতিতে — শান্তি •',done:'• বাটি তৈরি! •',msgs:{0:['• মাচা চালছি •','• জল ৮০°সে •','• নিয়মিত ফেটাচ্ছি •','• প্রায় হয়ে গেছে •'],1:['• হাত বিশ্রাম দিন •','• গভীর শ্বাস নিন •','• ধীরে ফিরুন •'],2:['• শান্ত থাকুন •','• মন স্থির করুন •','• প্রায় শেষ •']}}},
+  {code:'pt',label:'🇧🇷 Português',tasks:'Tarefas',addTask:'Adicionar tarefa…',add:'Adicionar',mins:'min',coffee:{brand:'Brew & Focus',sub:'• cada sessão é um café',cups:'Xícaras feitas',today:'Xícaras de hoje',tabs:['Espresso (25m)','Pausa curta (5m)','Cold brew (15m)'],modes:['Shot de espresso','Pausa rápida','Pausa cold brew'],start:'Começar',pause:'Pausar',reset:'Reiniciar',ready:'• pronto para preparar •',paused:'• em pausa •',done:'• xícara pronta! •',msgs:{0:['• moendo os grãos •','• aquecendo a água •','• quase lá •','• mais um instante •'],1:['• aproveite o gole •','• alongue um pouco •','• voltamos logo •'],2:['• paciência •','• em infusão •','• quase pronto •']}},matcha:{brand:'Bater & Serenidade',sub:'• cada sessão é uma tigela',cups:'Tigelas preparadas',today:'Tigelas de hoje',tabs:['Cerimônia (25m)','Pausa (5m)','Descanso (15m)'],modes:['Tigela cerimonial','Pausa serena','Mente em repouso'],start:'Iniciar cerimônia',pause:'Pausar',reset:'Reiniciar',ready:'• pronto para bater •',paused:'• em pausa — serenidade •',done:'• tigela pronta! •',msgs:{0:['• peneirando matcha •','• água a 80°C •','• batendo devagar •','• quase pronto •'],1:['• descanse as mãos •','• respire fundo •','• volte devagar •'],2:['• mantenha a calma •','• deixe repousar •','• quase terminado •']}}},
+  {code:'ru',label:'🇷🇺 Русский',tasks:'Задачи',addTask:'Добавить задачу…',add:'Добавить',mins:'мин',coffee:{brand:'Brew & Focus',sub:'• каждая сессия — это чашка',cups:'Сваренных чашек',today:'Чашек сегодня',tabs:['Эспрессо (25м)','Короткий перерыв (5м)','Холодный кофе (15м)'],modes:['Шот эспрессо','Короткий перерыв','Холодный перерыв'],start:'Начать варить',pause:'Пауза',reset:'Сбросить',ready:'• готов к варке •',paused:'• на паузе •',done:'• чашка готова! •',msgs:{0:['• мелем зёрна •','• вода нагревается •','• почти готово •','• ещё чуть-чуть •'],1:['• насладитесь глотком •','• потянитесь •','• скоро вернёмся •'],2:['• немного терпения •','• настаивается •','• почти готово •']}},matcha:{brand:'Взбить & Покой',sub:'• каждая сессия — это чаша',cups:'Приготовлено чаш',today:'Чаш сегодня',tabs:['Церемония (25м)','Пауза (5м)','Отдых (15м)'],modes:['Церемониальная чаша','Тихая пауза','Отдых для ума'],start:'Начать церемонию',pause:'Пауза',reset:'Сбросить',ready:'• готов взбивать •',paused:'• пауза — покой •',done:'• чаша готова! •',msgs:{0:['• просеиваем матча •','• вода 80°C •','• взбиваем равномерно •','• почти готово •'],1:['• отдохните руки •','• дышите глубже •','• возвращайтесь не спеша •'],2:['• сохраняйте покой •','• мысли оседают •','• почти завершено •']}}},
+  {code:'ja',label:'🇯🇵 日本語',tasks:'タスク',addTask:'タスクを追加…',add:'追加',mins:'分',coffee:{brand:'Brew & Focus',sub:'• 一杯一杯が集中の証',cups:'抽出したカップ',today:'今日のカップ',tabs:['エスプレッソ（25分）','短い休憩（5分）','水出し（15分）'],modes:['エスプレッソ','小休止','水出し休憩'],start:'抽出開始',pause:'一時停止',reset:'リセット',ready:'• 抽出準備完了 •',paused:'• 一時停止中 •',done:'• カップ完成！•',msgs:{0:['• 豆を挽いています •','• お湯を沸かしています •','• もうすぐです •','• あと少し •'],1:['• 一口楽しんで •','• ストレッチして •','• すぐ戻ります •'],2:['• 水出しは時間が必要 •','• 抽出中 •','• もうすぐ •']}},matcha:{brand:'抹茶と静寂',sub:'• 一碗一碗が集中の証',cups:'点てた碗数',today:'今日の碗数',tabs:['茶道（25分）','一服（5分）','休憩（15分）'],modes:['茶道の碗','一服の間','心の休息'],start:'茶道を始める',pause:'一時停止',reset:'リセット',ready:'• 点てる準備完了 •',paused:'• 一時停止 — 静寂 •',done:'• 一碗できました！•',msgs:{0:['• 抹茶をふるっています •','• お湯は80°C •','• しっかり点てています •','• もうすぐです •'],1:['• 手を休めてください •','• 深呼吸 •','• ゆっくり戻って •'],2:['• 静けさを保ちましょう •','• 思いを落ち着けて •','• もうすぐです •']}}},
+  {code:'de',label:'🇩🇪 Deutsch',tasks:'Aufgaben',addTask:'Aufgabe hinzufügen…',add:'Hinzufügen',mins:'Min',coffee:{brand:'Brew & Focus',sub:'• jede Sitzung ist ein Aufguss',cups:'Gebrühte Tassen',today:'Tassen heute',tabs:['Espresso (25Min)','Kurze Pause (5Min)','Cold Brew (15Min)'],modes:['Espresso-Shot','Kurze Pause','Cold-Brew-Pause'],start:'Brühen starten',pause:'Pause',reset:'Zurücksetzen',ready:'• bereit zum Brühen •',paused:'• pausiert •',done:'• Tasse fertig! •',msgs:{0:['• Bohnen mahlen •','• Wasser erhitzen •','• fast fertig •','• gleich geschafft •'],1:['• einen Schluck genießen •','• etwas dehnen •','• bald zurück •'],2:['• Geduld haben •','• zieht langsam •','• fast fertig •']}},matcha:{brand:'Schlagen & Stille',sub:'• jede Sitzung ist eine Schale',cups:'Bereitete Schalen',today:'Schalen heute',tabs:['Zeremonie (25Min)','Schluck-Pause (5Min)','Ruhe (15Min)'],modes:['Zeremonielle Schale','Schluck-Pause','Geistige Ruhe'],start:'Zeremonie beginnen',pause:'Pause',reset:'Zurücksetzen',ready:'• bereit zum Schlagen •',paused:'• pausiert — Stille •',done:'• Schale fertig! •',msgs:{0:['• Matcha sieben •','• Wasser bei 80°C •','• gleichmäßig schlagen •','• fast fertig •'],1:['• Hände ausruhen •','• tief einatmen •','• langsam zurück •'],2:['• Ruhe bewahren •','• Gedanken setzen sich •','• fast geschafft •']}}},
+  {code:'ko',label:'🇰🇷 한국어',tasks:'할 일',addTask:'할 일 추가…',add:'추가',mins:'분',coffee:{brand:'브루 & 포커스',sub:'• 매 세션은 한 잔의 커피',cups:'만든 잔 수',today:'오늘의 잔 수',tabs:['에스프레소 (25분)','짧은 휴식 (5분)','콜드 브루 (15분)'],modes:['에스프레소 샷','짧은 휴식','콜드 브루 휴식'],start:'브루잉 시작',pause:'일시정지',reset:'초기화',ready:'• 브루 준비 완료 •',paused:'• 일시정지 •',done:'• 잔 완성! •',msgs:{0:['• 원두 갈기 •','• 물 가열 중 •','• 거의 다 됐어요 •','• 조금만 더 •'],1:['• 한 모금 즐기세요 •','• 스트레칭 하세요 •','• 곧 돌아올게요 •'],2:['• 조금만 기다려요 •','• 천천히 우리는 중 •','• 거의 준비됐어요 •']}},matcha:{brand:'거품 & 고요',sub:'• 매 세션은 한 그릇',cups:'만든 그릇 수',today:'오늘의 그릇 수',tabs:['다도 (25분)','한 모금 (5분)','휴식 (15분)'],modes:['다도 그릇','잠깐 쉬어요','마음 쉬기'],start:'다도 시작',pause:'일시정지',reset:'초기화',ready:'• 거품 낼 준비 •',paused:'• 일시정지 — 고요 •',done:'• 그릇 완성! •',msgs:{0:['• 말차 체에 걸러 •','• 물 온도 80°C •','• 균일하게 저어요 •','• 거의 다 됐어요 •'],1:['• 손을 쉬게 하세요 •','• 깊게 숨 쉬세요 •','• 천천히 돌아와요 •'],2:['• 고요함을 유지해요 •','• 생각이 가라앉아요 •','• 거의 완성됐어요 •']}}},
+  {code:'tr',label:'🇹🇷 Türkçe',tasks:'Görevler',addTask:'Görev ekle…',add:'Ekle',mins:'dk',coffee:{brand:'Brew & Focus',sub:'• her seans bir demleme',cups:'Hazırlanan fincan',today:'Bugünkü fincanlar',tabs:['Espresso (25dk)','Kısa mola (5dk)','Soğuk demleme (15dk)'],modes:['Espresso şotu','Kısa mola','Soğuk demleme molası'],start:'Demleye başla',pause:'Duraklat',reset:'Sıfırla',ready:'• demlenmeye hazır •',paused:'• duraklatıldı •',done:'• fincan hazır! •',msgs:{0:['• çekirdekler öğütülüyor •','• su ısınıyor •','• neredeyse hazır •','• biraz daha •'],1:['• bir yudum al •','• biraz gerin •','• birazdan döneceğiz •'],2:['• sabırlı ol •','• yavaşça demleniyor •','• neredeyse hazır •']}},matcha:{brand:'Çırpma & Huzur',sub:'• her seans bir kase',cups:'Hazırlanan kase',today:'Bugünkü kaseler',tabs:['Tören (25dk)','Yudum molası (5dk)','Dinlenme (15dk)'],modes:['Tören kasesi','Yudum molası','Dingin zihin'],start:'Töreni başlat',pause:'Duraklat',reset:'Sıfırla',ready:'• çırpmaya hazır •',paused:'• durakladı — huzur •',done:'• kase hazır! •',msgs:{0:['• matcha eleniyor •','• su 80°C •','• düzenli çırpılıyor •','• neredeyse hazır •'],1:['• ellerini dinlendir •','• derin nefes al •','• yavaşça geri dön •'],2:['• sakin kal •','• düşünceler durulsun •','• neredeyse bitti •']}}},
+  {code:'vi',label:'🇻🇳 Tiếng Việt',tasks:'Nhiệm vụ',addTask:'Thêm nhiệm vụ…',add:'Thêm',mins:'ph',coffee:{brand:'Brew & Focus',sub:'• mỗi phiên là một ly',cups:'Ly đã pha',today:'Ly hôm nay',tabs:['Espresso (25ph)','Nghỉ ngắn (5ph)','Cold brew (15ph)'],modes:['Shot espresso','Nghỉ ngắn','Nghỉ cold brew'],start:'Bắt đầu pha',pause:'Tạm dừng',reset:'Đặt lại',ready:'• sẵn sàng pha •',paused:'• đã tạm dừng •',done:'• ly đã xong! •',msgs:{0:['• đang xay hạt •','• nước đang nóng •','• sắp xong rồi •','• còn một chút •'],1:['• nhâm nhi cà phê •','• duỗi người một chút •','• sắp quay lại •'],2:['• kiên nhẫn nhé •','• đang ngấm từ từ •','• sắp xong rồi •']}},matcha:{brand:'Đánh & Tĩnh Lặng',sub:'• mỗi phiên là một bát',cups:'Bát đã pha',today:'Bát hôm nay',tabs:['Nghi lễ (25ph)','Nghỉ uống (5ph)','Nghỉ ngơi (15ph)'],modes:['Bát nghi lễ','Nghỉ uống','Tâm trí nghỉ ngơi'],start:'Bắt đầu nghi lễ',pause:'Tạm dừng',reset:'Đặt lại',ready:'• sẵn sàng đánh •',paused:'• tạm dừng — tĩnh lặng •',done:'• bát đã xong! •',msgs:{0:['• rây matcha •','• nước 80°C •','• đánh đều tay •','• sắp xong rồi •'],1:['• nghỉ tay một chút •','• thở sâu đi •','• quay lại từ từ •'],2:['• giữ bình tĩnh •','• để suy nghĩ lắng •','• sắp hoàn thành •']}}},
+  {code:'it',label:'🇮🇹 Italiano',tasks:'Attività',addTask:'Aggiungi attività…',add:'Aggiungi',mins:'min',coffee:{brand:'Brew & Focus',sub:'• ogni sessione è un caffè',cups:'Tazze preparate',today:'Tazze di oggi',tabs:['Espresso (25min)','Pausa breve (5min)','Cold brew (15min)'],modes:['Shot di espresso','Pausa breve','Pausa cold brew'],start:'Inizia a preparare',pause:'Pausa',reset:'Reimposta',ready:'• pronto per preparare •',paused:'• in pausa •',done:'• tazza pronta! •',msgs:{0:['• macinando i chicchi •','• acqua in riscaldamento •','• quasi pronto •','• ancora un istante •'],1:["• goditi il sorso •","• fai un po' di stretching •",'• torniamo presto •'],2:["• un po' di pazienza •",'• in infusione •','• quasi pronto •']}},matcha:{brand:'Frusta & Serenità',sub:'• ogni sessione è una ciotola',cups:'Ciotole preparate',today:'Ciotole di oggi',tabs:['Cerimonia (25min)','Pausa sorseggio (5min)','Riposo (15min)'],modes:['Ciotola cerimoniale','Pausa serena','Mente a riposo'],start:'Inizia la cerimonia',pause:'Pausa',reset:'Reimposta',ready:'• pronto per frustare •',paused:'• in pausa — serenità •',done:'• ciotola pronta! •',msgs:{0:['• setacciando il matcha •','• acqua a 80°C •','• frustando con calma •','• quasi pronto •'],1:['• riposa le mani •','• respira profondamente •','• torna lentamente •'],2:['• mantieni la calma •','• lascia riposare •','• quasi terminato •']}}},
+  {code:'fa',label:'🇮🇷 فارسی',tasks:'وظایف',addTask:'افزودن وظیفه…',add:'افزودن',mins:'د',coffee:{brand:'دم‌آوری و تمرکز',sub:'• هر جلسه یک فنجان است',cups:'فنجان‌های آماده',today:'فنجان‌های امروز',tabs:['اسپرسو (۲۵د)','استراحت کوتاه (۵د)','قهوه سرد (۱۵د)'],modes:['شات اسپرسو','استراحت کوتاه','استراحت قهوه سرد'],start:'شروع دم‌آوری',pause:'مکث',reset:'بازنشانی',ready:'• آماده برای دم‌آوری •',paused:'• متوقف شد •',done:'• فنجان آماده است! •',msgs:{0:['• آسیاب دانه‌ها •','• آب در حال گرم شدن •','• نزدیک به پایان •','• کمی دیگر •'],1:['• یک جرعه بنوش •','• کمی کشش بده •','• به زودی برمی‌گردیم •'],2:['• صبور باش •','• آرام دم می‌کشد •','• نزدیک به پایان •']}},matcha:{brand:'ماچا و آرامش',sub:'• هر جلسه یک کاسه است',cups:'کاسه‌های آماده',today:'کاسه‌های امروز',tabs:['مراسم (۲۵د)','مکث نوشیدن (۵د)','استراحت (۱۵د)'],modes:['کاسه مراسمی','مکث آرام','ذهن در استراحت'],start:'شروع مراسم',pause:'مکث',reset:'بازنشانی',ready:'• آماده هم زدن •',paused:'• متوقف — آرامش •',done:'• کاسه آماده است! •',msgs:{0:['• ماچا الک می‌شود •','• آب ۸۰ درجه •','• هم می‌زنیم یکنواخت •','• نزدیک به پایان •'],1:['• دست‌هایت را استراحت بده •','• نفس عمیق بکش •','• آرام برگرد •'],2:['• آرامش را حفظ کن •','• افکار ته‌نشین شوند •','• نزدیک به پایان •']}}},
+  {code:'pl',label:'🇵🇱 Polski',tasks:'Zadania',addTask:'Dodaj zadanie…',add:'Dodaj',mins:'min',coffee:{brand:'Brew & Focus',sub:'• każda sesja to parzenie',cups:'Zaparzone filiżanki',today:'Filiżanki dziś',tabs:['Espresso (25min)','Krótka przerwa (5min)','Cold brew (15min)'],modes:['Shot espresso','Krótka przerwa','Przerwa cold brew'],start:'Zacznij parzyć',pause:'Pauza',reset:'Resetuj',ready:'• gotowy do parzenia •',paused:'• wstrzymano •',done:'• filiżanka gotowa! •',msgs:{0:['• mielenie ziaren •','• woda się nagrzewa •','• prawie gotowe •','• jeszcze chwila •'],1:['• ciesz się łykiem •','• trochę się rozciągnij •','• wracamy wkrótce •'],2:['• trochę cierpliwości •','• zaparza się •','• prawie gotowe •']}},matcha:{brand:'Ubijaj & Spokój',sub:'• każda sesja to miska',cups:'Przygotowane miski',today:'Miski dziś',tabs:['Ceremonia (25min)','Przerwa (5min)','Odpoczynek (15min)'],modes:['Miska ceremonialna','Cicha przerwa','Odpoczynek umysłu'],start:'Rozpocznij ceremonię',pause:'Pauza',reset:'Resetuj',ready:'• gotowy do ubijania •',paused:'• wstrzymano — spokój •',done:'• miska gotowa! •',msgs:{0:['• przesiewamy matcha •','• woda 80°C •','• ubijamy równomiernie •','• prawie gotowe •'],1:['• odpoczynek dla rąk •','• oddychaj głęboko •','• wróć powoli •'],2:['• zachowaj spokój •','• myśli się osiadają •','• prawie skończone •']}}},
+  {code:'uk',label:'🇺🇦 Українська',tasks:'Завдання',addTask:'Додати завдання…',add:'Додати',mins:'хв',coffee:{brand:'Brew & Focus',sub:'• кожна сесія — це чашка',cups:'Зварених чашок',today:'Чашок сьогодні',tabs:['Еспресо (25хв)','Коротка перерва (5хв)','Холодна кава (15хв)'],modes:['Шот еспресо','Коротка перерва','Перерва на холодну каву'],start:'Почати варити',pause:'Пауза',reset:'Скинути',ready:'• готовий до варіння •',paused:'• на паузі •',done:'• чашка готова! •',msgs:{0:['• мелемо зерна •','• вода нагрівається •','• майже готово •','• ще трохи •'],1:['• насолодіться ковтком •','• потягніться •','• скоро повернемося •'],2:['• трохи терпіння •','• настоюється •','• майже готово •']}},matcha:{brand:'Збивати & Спокій',sub:'• кожна сесія — це чаша',cups:'Приготовлених чаш',today:'Чаш сьогодні',tabs:['Церемонія (25хв)','Пауза (5хв)','Відпочинок (15хв)'],modes:['Церемоніальна чаша','Тиха пауза','Відпочинок розуму'],start:'Почати церемонію',pause:'Пауза',reset:'Скинути',ready:'• готовий збивати •',paused:'• пауза — спокій •',done:'• чаша готова! •',msgs:{0:['• просіюємо матча •','• вода 80°C •','• збиваємо рівномірно •','• майже готово •'],1:['• відпочиньте руки •','• дихайте глибше •','• повертайтесь не поспішаючи •'],2:['• зберігайте спокій •','• думки осідають •','• майже завершено •']}}},
+  {code:'nl',label:'🇳🇱 Nederlands',tasks:'Taken',addTask:'Taak toevoegen…',add:'Toevoegen',mins:'min',coffee:{brand:'Brew & Focus',sub:'• elke sessie is een kop',cups:'Gezette koppen',today:'Koppen vandaag',tabs:['Espresso (25min)','Korte pauze (5min)','Cold brew (15min)'],modes:['Espresso-shot','Korte pauze','Cold-brewpauze'],start:'Beginnen met zetten',pause:'Pauzeren',reset:'Opnieuw instellen',ready:'• klaar om te zetten •',paused:'• gepauzeerd •',done:'• kopje klaar! •',msgs:{0:['• bonen malen •','• water verwarmen •','• bijna klaar •','• nog even •'],1:['• geniet van een slokje •','• rek je even uit •','• zo terug •'],2:['• geduld alsjeblieft •','• trekt langzaam •','• bijna klaar •']}},matcha:{brand:'Kloppen & Stilte',sub:'• elke sessie is een kom',cups:'Bereide kommen',today:'Kommen vandaag',tabs:['Ceremonie (25min)','Slokpauze (5min)','Rust (15min)'],modes:['Ceremoniële kom','Rustige pauze','Mentale rust'],start:'Ceremonie beginnen',pause:'Pauzeren',reset:'Opnieuw instellen',ready:'• klaar om te kloppen •',paused:'• gepauzeerd — stilte •',done:'• kom klaar! •',msgs:{0:['• matcha zeven •','• water op 80°C •','• gelijkmatig kloppen •','• bijna klaar •'],1:['• rust je handen •','• adem diep in •','• kom langzaam terug •'],2:['• blijf kalm •','• gedachten zakken neer •','• bijna klaar •']}}},
+  {code:'th',label:'🇹🇭 ภาษาไทย',tasks:'งาน',addTask:'เพิ่มงาน…',add:'เพิ่ม',mins:'นาที',coffee:{brand:'ชงกาแฟ & โฟกัส',sub:'• ทุกเซสชันคือหนึ่งแก้ว',cups:'แก้วที่ชงแล้ว',today:'แก้ววันนี้',tabs:['เอสเพรสโซ (25นาที)','พักสั้น (5นาที)','โคลด์บรู (15นาที)'],modes:['ช็อตเอสเพรสโซ','พักสั้น','พักโคลด์บรู'],start:'เริ่มชง',pause:'หยุดชั่วคราว',reset:'รีเซ็ต',ready:'• พร้อมชง •',paused:'• หยุดชั่วคราว •',done:'• แก้วพร้อมแล้ว! •',msgs:{0:['• บดเมล็ดกาแฟ •','• น้ำกำลังร้อน •','• ใกล้จะเสร็จ •','• อีกนิดเดียว •'],1:['• จิบกาแฟสักหน่อย •','• ยืดเส้นยืดสาย •','• กลับมาเร็วๆ นี้ •'],2:['• ต้องอดทน •','• กำลังแช่อยู่ •','• ใกล้พร้อมแล้ว •']}},matcha:{brand:'ตีมัทฉะ & ความสงบ',sub:'• ทุกเซสชันคือหนึ่งชาม',cups:'ชามที่ชงแล้ว',today:'ชามวันนี้',tabs:['พิธี (25นาที)','พักจิบ (5นาที)','พัก (15นาที)'],modes:['ชามพิธี','พักจิบ','ใจพักผ่อน'],start:'เริ่มพิธี',pause:'หยุดชั่วคราว',reset:'รีเซ็ต',ready:'• พร้อมตีมัทฉะ •',paused:'• หยุด — ความสงบ •',done:'• ชามพร้อมแล้ว! •',msgs:{0:['• ร่อนมัทฉะ •','• น้ำ 80°C •','• ตีอย่างสม่ำเสมอ •','• ใกล้เสร็จแล้ว •'],1:['• พักมือสักหน่อย •','• หายใจลึกๆ •','• ค่อยๆ กลับมา •'],2:['• รักษาความสงบ •','• ปล่อยความคิดตกตะกอน •','• ใกล้เสร็จแล้ว •']}}},
+  {code:'ms',label:'🇲🇾 Bahasa Melayu',tasks:'Tugasan',addTask:'Tambah tugasan…',add:'Tambah',mins:'min',coffee:{brand:'Brew & Focus',sub:'• setiap sesi adalah secawan',cups:'Cawan dibancuh',today:'Cawan hari ini',tabs:['Espresso (25min)','Rehat singkat (5min)','Cold brew (15min)'],modes:['Shot espresso','Rehat singkat','Rehat cold brew'],start:'Mula bancuh',pause:'Jeda',reset:'Set semula',ready:'• sedia untuk bancuh •',paused:'• dijeda •',done:'• cawan siap! •',msgs:{0:['• mengisar biji •','• air sedang panas •','• hampir siap •','• sekejap lagi •'],1:['• nikmati tegukan •','• regang sedikit •','• akan kembali •'],2:['• sabar sedikit •','• sedang direndam •','• hampir siap •']}},matcha:{brand:'Pukul & Ketenangan',sub:'• setiap sesi adalah semangkuk',cups:'Mangkuk disediakan',today:'Mangkuk hari ini',tabs:['Upacara (25min)','Rehat teguk (5min)','Rehat (15min)'],modes:['Mangkuk upacara','Rehat tenang','Minda berehat'],start:'Mulakan upacara',pause:'Jeda',reset:'Set semula',ready:'• sedia untuk pukul •',paused:'• dijeda — ketenangan •',done:'• mangkuk siap! •',msgs:{0:['• ayak matcha •','• air pada 80°C •','• pukul sekata •','• hampir siap •'],1:['• rehatkan tangan •','• tarik nafas dalam •','• kembali perlahan •'],2:['• kekal tenang •','• biarkan fikiran mendap •','• hampir selesai •']}}},
+  {code:'id',label:'🇮🇩 Bahasa Indonesia',tasks:'Tugas',addTask:'Tambah tugas…',add:'Tambah',mins:'mnt',coffee:{brand:'Brew & Focus',sub:'• setiap sesi adalah secangkir',cups:'Cangkir diseduh',today:'Cangkir hari ini',tabs:['Espresso (25mnt)','Istirahat singkat (5mnt)','Cold brew (15mnt)'],modes:['Shot espresso','Istirahat singkat','Istirahat cold brew'],start:'Mulai menyeduh',pause:'Jeda',reset:'Atur ulang',ready:'• siap untuk menyeduh •',paused:'• dijeda •',done:'• cangkir siap! •',msgs:{0:['• menggiling biji •','• air sedang panas •','• hampir selesai •','• sebentar lagi •'],1:['• nikmati tegukan •','• regangkan tubuh •','• segera kembali •'],2:['• sedikit sabar •','• sedang direndam •','• hampir siap •']}},matcha:{brand:'Kocok & Ketenangan',sub:'• setiap sesi adalah semangkuk',cups:'Mangkuk disiapkan',today:'Mangkuk hari ini',tabs:['Upacara (25mnt)','Jeda minum (5mnt)','Istirahat (15mnt)'],modes:['Mangkuk upacara','Jeda tenang','Pikiran beristirahat'],start:'Mulai upacara',pause:'Jeda',reset:'Atur ulang',ready:'• siap mengocok •',paused:'• dijeda — ketenangan •',done:'• mangkuk siap! •',msgs:{0:['• ayak matcha •','• air 80°C •','• kocok merata •','• hampir selesai •'],1:['• istirahatkan tangan •','• tarik napas dalam •','• kembali perlahan •'],2:['• tetap tenang •','• biarkan pikiran mengendap •','• hampir selesai •']}}},
+  {code:'sv',label:'🇸🇪 Svenska',tasks:'Uppgifter',addTask:'Lägg till uppgift…',add:'Lägg till',mins:'min',coffee:{brand:'Brew & Focus',sub:'• varje session är en kopp',cups:'Bryggda koppar',today:'Koppar idag',tabs:['Espresso (25min)','Kort paus (5min)','Kallt brygg (15min)'],modes:['Espresso-shot','Kort paus','Kall brygg-paus'],start:'Börja brygga',pause:'Pausa',reset:'Återställ',ready:'• redo att brygga •',paused:'• pausad •',done:'• koppen är klar! •',msgs:{0:['• maler bönor •','• vatten värms upp •','• nästan klart •','• lite till •'],1:['• njut av en klunk •','• sträck på dig lite •','• snart tillbaka •'],2:['• lite tålamod •','• drar sakta •','• nästan klart •']}},matcha:{brand:'Vispa & Stillhet',sub:'• varje session är en skål',cups:'Beredda skålar',today:'Skålar idag',tabs:['Ceremoni (25min)','Klunkpaus (5min)','Vila (15min)'],modes:['Ceremoniell skål','Stilla paus','Sinnesvila'],start:'Börja ceremonin',pause:'Pausa',reset:'Återställ',ready:'• redo att vispa •',paused:'• pausad — stillhet •',done:'• skålen är klar! •',msgs:{0:['• siktar matcha •','• vatten vid 80°C •','• vispar jämnt •','• nästan klart •'],1:['• vila händerna •','• andas djupt •','• återvänd sakta •'],2:['• håll dig lugn •','• tankar lägger sig •','• nästan klart •']}}},
+  {code:'sw',label:'🇰🇪 Kiswahili',tasks:'Kazi',addTask:'Ongeza kazi…',add:'Ongeza',mins:'dk',coffee:{brand:'Brew & Focus',sub:'• kila kipindi ni kikombe',cups:'Vikombe vilivyotengenezwa',today:'Vikombe vya leo',tabs:['Espresso (dk 25)','Mapumziko mafupi (dk 5)','Cold brew (dk 15)'],modes:['Shoti la espresso','Mapumziko mafupi','Mapumziko ya cold brew'],start:'Anza kutengeneza',pause:'Simamisha',reset:'Weka upya',ready:'• tayari kutengeneza •',paused:'• imesimamishwa •',done:'• kikombe kiko tayari! •',msgs:{0:['• kusaga mbegu •','• maji yanachomeka •','• karibu kukamilika •','• kidogo zaidi •'],1:['• furahia kinywaji •','• nyoosha kidogo •','• tutarudi hivi karibuni •'],2:['• subiri kidogo •','• inachemka polepole •','• karibu kukamilika •']}},matcha:{brand:'Piga & Utulivu',sub:'• kila kipindi ni bakuli',cups:'Mabakuli yaliyoandaliwa',today:'Mabakuli ya leo',tabs:['Sherehe (dk 25)','Mapumziko (dk 5)','Kupumzika (dk 15)'],modes:['Bakuli la sherehe','Mapumziko ya utulivu','Akili kupumzika'],start:'Anza sherehe',pause:'Simamisha',reset:'Weka upya',ready:'• tayari kupiga •',paused:'• imesimama — utulivu •',done:'• bakuli liko tayari! •',msgs:{0:['• unachekecha matcha •','• maji 80°C •','• kupiga kwa usawa •','• karibu kukamilika •'],1:['• pumzisha mikono •','• pumua kwa kina •','• rudi polepole •'],2:['• baki na utulivu •','• fikira zinatulia •','• karibu kukamilika •']}}},
+  {code:'ro',label:'🇷🇴 Română',tasks:'Sarcini',addTask:'Adaugă sarcină…',add:'Adaugă',mins:'min',coffee:{brand:'Brew & Focus',sub:'• fiecare sesiune e o ceașcă',cups:'Cești preparate',today:'Cești azi',tabs:['Espresso (25min)','Pauză scurtă (5min)','Cold brew (15min)'],modes:['Shot de espresso','Pauză scurtă','Pauză cold brew'],start:'Începe prepararea',pause:'Pauză',reset:'Resetează',ready:'• gata de preparat •',paused:'• în pauză •',done:'• ceașca e gata! •',msgs:{0:['• se macină boabele •','• apa se încălzește •','• aproape gata •','• mai puțin •'],1:['• bucură-te de o gură •','• întinde-te puțin •','• revenim curând •'],2:['• puțină răbdare •','• se infuzează încet •','• aproape gata •']}},matcha:{brand:'Bate & Liniște',sub:'• fiecare sesiune e un bol',cups:'Boluri preparate',today:'Boluri azi',tabs:['Ceremonie (25min)','Pauză (5min)','Odihnă (15min)'],modes:['Bol ceremonial','Pauză liniștită','Minte odihnită'],start:'Începe ceremonia',pause:'Pauză',reset:'Resetează',ready:'• gata să bați •',paused:'• în pauză — liniște •',done:'• bolul e gata! •',msgs:{0:['• se cerne matcha •','• apă la 80°C •','• se bate uniform •','• aproape gata •'],1:['• odihnește mâinile •','• respiră adânc •','• întoarce-te lent •'],2:['• păstrează calmul •','• gândurile se liniștesc •','• aproape gata •']}}}
+];
+
+const THEMES={
+  coffee:{rs:'#6b2f2f',rb:'#e8ddd0',st:'#c4956a',
+    draw(b){b.innerHTML=`<path d="M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z" fill="#f5f0e8" stroke="#3b1a1a" stroke-width="2.5" stroke-linejoin="round"/><rect id="liq" x="42" y="144" width="76" height="0" fill="#6b2f2f" clip-path="url(#vClip)" class="liquid-anim"/><rect x="38" y="64" width="84" height="8" rx="3" fill="#f5f0e8" stroke="#3b1a1a" stroke-width="2.5"/><path d="M108 84 Q132 84 132 104 Q132 124 108 124" fill="none" stroke="#3b1a1a" stroke-width="2.5" stroke-linecap="round"/><path d="M108 92 Q122 92 122 104 Q122 116 108 116" fill="none" stroke="#3b1a1a" stroke-width="2"/><ellipse cx="80" cy="148" rx="52" ry="6" fill="#e8ddd0" stroke="#3b1a1a" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z');},
+    empty:`<svg width="18" height="20" viewBox="0 0 18 20" opacity="0.22"><path d="M2 6 L4 16 Q4.5 18 9 18 Q13.5 18 14 16 L16 6 Z" fill="none" stroke="#3b1a1a" stroke-width="1.5"/><rect x="1" y="4.5" width="16" height="3" rx="1" fill="none" stroke="#3b1a1a" stroke-width="1.5"/><path d="M14 8.5 Q18 8.5 18 12 Q18 15.5 14 15.5" fill="none" stroke="#3b1a1a" stroke-width="1.5"/></svg>`,
+    full:`<svg width="18" height="20" viewBox="0 0 18 20"><path d="M2 6 L4 16 Q4.5 18 9 18 Q13.5 18 14 16 L16 6 Z" fill="#6b2f2f" stroke="#3b1a1a" stroke-width="1.5"/><rect x="1" y="4.5" width="16" height="3" rx="1" fill="#6b2f2f" stroke="#3b1a1a" stroke-width="1.5"/><path d="M14 8.5 Q18 8.5 18 12 Q18 15.5 14 15.5" fill="none" stroke="#3b1a1a" stroke-width="1.5"/></svg>`},
+  matcha:{rs:'#5a8c3a',rb:'#c8dfc0',st:'#7aab5a',
+    draw(b){b.innerHTML=`<path d="M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z" fill="#f2f5ee" stroke="#1a2e1a" stroke-width="2.2"/><rect id="liq" x="34" y="148" width="92" height="0" fill="#5a8c3a" clip-path="url(#vClip)" class="liquid-anim"/><ellipse cx="80" cy="100" rx="46" ry="14" fill="#f2f5ee" stroke="#1a2e1a" stroke-width="2.2"/><ellipse cx="80" cy="152" rx="52" ry="8" fill="#ddebd4" stroke="#1a2e1a" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z');},
+    empty:`<svg width="20" height="20" viewBox="0 0 20 20" opacity="0.22"><path d="M2 10 Q2 18 10 18 Q18 18 18 10 Q14 6 10 5 Q6 6 2 10Z" fill="none" stroke="#1a2e1a" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="none" stroke="#1a2e1a" stroke-width="1.5"/></svg>`,
+    full:`<svg width="20" height="20" viewBox="0 0 20 20"><path d="M2 10 Q2 18 10 18 Q18 18 18 10 Q14 6 10 5 Q6 6 2 10Z" fill="#5a8c3a" stroke="#1a2e1a" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="#7aab5a" stroke="#1a2e1a" stroke-width="1.5"/></svg>`}
+};
+
+const EXTRA={
+  en:{ct:'Current task',nt:'• no task selected •',sup:'Supporters'},
+  zh:{ct:'当前任务',nt:'• 未选择任务 •',sup:'支持者'},
+  hi:{ct:'वर्तमान कार्य',nt:'• कोई कार्य नहीं •',sup:'समर्थक'},
+  es:{ct:'Tarea actual',nt:'• sin tarea •',sup:'Colaboradores'},
+  fr:{ct:'Tâche en cours',nt:'• aucune tâche •',sup:'Contributeurs'},
+  ar:{ct:'المهمة الحالية',nt:'• لا توجد مهمة •',sup:'الداعمون'},
+  bn:{ct:'বর্তমান কাজ',nt:'• কোনো কাজ নেই •',sup:'সমর্থকরা'},
+  pt:{ct:'Tarefa atual',nt:'• nenhuma tarefa •',sup:'Apoiadores'},
+  ru:{ct:'Текущая задача',nt:'• задача не выбрана •',sup:'Поддержавшие'},
+  ja:{ct:'現在のタスク',nt:'• タスク未選択 •',sup:'サポーター'},
+  de:{ct:'Aktuelle Aufgabe',nt:'• keine Aufgabe •',sup:'Unterstützer'},
+  ko:{ct:'현재 할 일',nt:'• 선택 없음 •',sup:'후원자'},
+  tr:{ct:'Mevcut görev',nt:'• görev yok •',sup:'Destekçiler'},
+  vi:{ct:'Nhiệm vụ hiện tại',nt:'• chưa chọn •',sup:'Người ủng hộ'},
+  it:{ct:'Attività corrente',nt:'• nessuna attività •',sup:'Sostenitori'},
+  fa:{ct:'وظیفه فعلی',nt:'• وظیفه‌ای انتخاب نشده •',sup:'حامیان'},
+  pl:{ct:'Bieżące zadanie',nt:'• brak zadania •',sup:'Wspierający'},
+  uk:{ct:'Поточне завдання',nt:'• не вибрано •',sup:'Прихильники'},
+  nl:{ct:'Huidige taak',nt:'• geen taak •',sup:'Donateurs'},
+  th:{ct:'งานปัจจุบัน',nt:'• ยังไม่เลือก •',sup:'ผู้สนับสนุน'},
+  ms:{ct:'Tugasan semasa',nt:'• tiada tugasan •',sup:'Penyokong'},
+  id:{ct:'Tugas saat ini',nt:'• belum dipilih •',sup:'Pendukung'},
+  sv:{ct:'Aktuell uppgift',nt:'• ingen uppgift •',sup:'Supportrar'},
+  sw:{ct:'Kazi ya sasa',nt:'• hakuna kazi •',sup:'Wafadhili'},
+  ro:{ct:'Sarcina curentă',nt:'• nicio sarcină •',sup:'Susținători'}
+};
+
+const WORKER_URL='YOUR_WORKER_URL';
+
+let theme='coffee',langIdx=0,modeIdx=0,running=false,interval=null,sessions=0;
+let customMins=[25,5,15];
+let tasks=[];
+let currentTaskIdx=null;
+
+function MS(i){return customMins[i]*60;}
+function totalSecs(){return MS(modeIdx);}
+
+function loadState(){
+  try{
+    const t=localStorage.getItem('bf_theme');if(t)theme=t;
+    const l=localStorage.getItem('bf_lang');if(l)langIdx=parseInt(l);
+    const s=localStorage.getItem('bf_sessions');if(s)sessions=parseInt(s);
+    const m=localStorage.getItem('bf_times');if(m)customMins=JSON.parse(m);
+    const tk=localStorage.getItem('bf_tasks');if(tk)tasks=JSON.parse(tk);
+    const ct=localStorage.getItem('bf_ctask');currentTaskIdx=ct===null?null:parseInt(ct);
+    if(currentTaskIdx>=tasks.length)currentTaskIdx=null;
+  }catch(e){}
+}
+
+function saveState(){
+  try{
+    localStorage.setItem('bf_theme',theme);
+    localStorage.setItem('bf_lang',langIdx);
+    localStorage.setItem('bf_sessions',sessions);
+    localStorage.setItem('bf_times',JSON.stringify(customMins));
+    localStorage.setItem('bf_tasks',JSON.stringify(tasks));
+    localStorage.setItem('bf_ctask',currentTaskIdx===null?'':currentTaskIdx);
+  }catch(e){}
+}
+
+let remaining=MS(0);
+
+function L(){return LANGS[langIdx][theme];}
+function U(){return LANGS[langIdx];}
+function XU(){return EXTRA[LANGS[langIdx].code]||EXTRA.en;}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function ring(p){document.getElementById('ringFill').style.strokeDashoffset=427*(1-p);}
+function liquid(p){const l=document.getElementById('liq');if(!l)return;if(theme==='coffee'){const h=76*p;l.setAttribute('height',h);l.setAttribute('y',144-h);}else{const h=48*p;l.setAttribute('height',h);l.setAttribute('y',148-h);}}
+
+function playDone(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const t=ctx.currentTime;
+    [[523.25,0],[659.25,0.18],[783.99,0.36]].forEach(([f,d])=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=f;
+      g.gain.setValueAtTime(0,t+d);
+      g.gain.linearRampToValueAtTime(0.22,t+d+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,t+d+0.9);
+      o.start(t+d);o.stop(t+d+0.95);
+    });
+  }catch(e){}
+}
+
+function buildSelect(){
+  const s=document.getElementById('langSelect');
+  s.innerHTML='';
+  LANGS.forEach((l,i)=>{const o=document.createElement('option');o.value=i;o.textContent=l.label;if(i===langIdx)o.selected=true;s.appendChild(o);});
+}
+
+function setLang(i){langIdx=parseInt(i);applyLang();saveState();}
+
+function applyLang(){
+  const l=L(),u=U();
+  document.getElementById('brandName').textContent=l.brand;
+  document.getElementById('lblSubtitle').textContent=l.sub;
+  document.getElementById('lblCups').textContent=l.cups;
+  document.getElementById('lblToday').textContent=l.today;
+  [0,1,2].forEach(i=>{
+    document.getElementById('tab'+i).textContent=l.tabs[i];
+    const tl=document.getElementById('timeLabel'+i);if(tl)tl.textContent=l.modes[i];
+    const mu=document.getElementById('timeMins'+i);if(mu)mu.textContent=u.mins;
+  });
+  document.getElementById('modeLabel').textContent=l.modes[modeIdx];
+  document.getElementById('resetBtn').textContent=l.reset;
+  document.getElementById('startBtn').textContent=running?l.pause:l.start;
+  document.getElementById('lblTasks').textContent=u.tasks;
+  document.getElementById('taskInput').placeholder=u.addTask;
+  document.getElementById('addBtn').textContent=u.add;
+  document.getElementById('lblCurrentTask').textContent=XU().ct;
+  document.getElementById('lblSupporters').textContent=XU().sup;
+  if(!running&&remaining===totalSecs())document.getElementById('timerMsg').textContent=l.ready;
+  renderCurrentTask();
+}
+
+function syncTimeInputs(){
+  [0,1,2].forEach(i=>{const el=document.getElementById('timeInput'+i);if(el)el.value=customMins[i];});
+}
+
+function toggleSettings(){
+  const p=document.getElementById('settingsPanel');
+  const b=document.getElementById('settingsBtn');
+  const open=p.classList.toggle('open');
+  b.classList.toggle('open',open);
+}
+
+function updateTime(i,val){
+  const v=Math.max(1,Math.min(99,parseInt(val)||1));
+  customMins[i]=v;
+  document.getElementById('timeInput'+i).value=v;
+  if(modeIdx===i&&!running){
+    remaining=MS(i);
+    document.getElementById('timerDisplay').textContent=fmt(remaining);
+    ring(0);liquid(0);
+    document.getElementById('timerMsg').textContent=L().ready;
+  }
+  saveState();
+}
+
+function applyTheme(){
+  const T=THEMES[theme];
+  document.getElementById('ringBg').style.stroke=T.rb;
+  document.getElementById('ringFill').style.stroke=T.rs;
+  ['s1','s2','s3'].forEach(id=>document.getElementById(id).style.stroke=T.st);
+  T.draw(document.getElementById('vesselBody'));
+  const p=remaining===totalSecs()?0:1-remaining/totalSecs();
+  ring(p);liquid(p);
+}
+
+function setTheme(t){
+  theme=t;
+  document.getElementById('app').className=t==='coffee'?'theme-coffee':'theme-matcha';
+  document.getElementById('tCoffee').className='theme-opt'+(t==='coffee'?' active':'');
+  document.getElementById('tMatcha').className='theme-opt'+(t==='matcha'?' active':'');
+  applyTheme();applyLang();rebuildShelf();saveState();
+}
+
+function toggleTimer(){
+  if(!running){
+    running=true;
+    document.getElementById('startBtn').textContent=L().pause;
+    interval=setInterval(()=>{
+      remaining--;
+      document.getElementById('timerDisplay').textContent=fmt(remaining);
+      const p=1-remaining/totalSecs();
+      ring(p);liquid(p);
+      const m=L().msgs[modeIdx];
+      document.getElementById('timerMsg').textContent=m[Math.min(Math.floor(p*m.length),m.length-1)];
+      document.getElementById('steamGroup').style.opacity=p>.25?'1':'0';
+      if(remaining<=0){
+        clearInterval(interval);running=false;sessions++;
+        document.getElementById('sessionCount').textContent=sessions;
+        document.getElementById('startBtn').textContent=L().start;
+        document.getElementById('timerMsg').textContent=L().done;
+        addV();ring(1);liquid(1);
+        document.getElementById('steamGroup').style.opacity='1';
+        if(modeIdx===0&&currentTaskIdx!==null&&tasks[currentTaskIdx]){
+          tasks[currentTaskIdx].completedPours=(tasks[currentTaskIdx].completedPours||0)+1;
+          renderCurrentTask();renderTasks();
+        }
+        playDone();saveState();
+      }
+    },1000);
+  }else{
+    clearInterval(interval);running=false;
+    document.getElementById('startBtn').textContent=L().start;
+    document.getElementById('timerMsg').textContent=L().paused;
+  }
+}
+
+function resetTimer(){
+  clearInterval(interval);running=false;
+  remaining=totalSecs();
+  document.getElementById('timerDisplay').textContent=fmt(remaining);
+  document.getElementById('startBtn').textContent=L().start;
+  document.getElementById('timerMsg').textContent=L().ready;
+  document.getElementById('steamGroup').style.opacity='0';
+  ring(0);liquid(0);
+}
+
+function switchMode(i){
+  clearInterval(interval);running=false;modeIdx=i;
+  remaining=MS(i);
+  [0,1,2].forEach(j=>document.getElementById('tab'+j).className='tab'+(j===i?' active':''));
+  document.getElementById('timerDisplay').textContent=fmt(remaining);
+  document.getElementById('modeLabel').textContent=L().modes[i];
+  document.getElementById('startBtn').textContent=L().start;
+  document.getElementById('timerMsg').textContent=L().ready;
+  document.getElementById('steamGroup').style.opacity='0';
+  ring(0);liquid(0);
+}
+
+function addV(){document.getElementById('mugsRow').insertAdjacentHTML('beforeend',THEMES[theme].full);}
+function rebuildShelf(){
+  const r=document.getElementById('mugsRow');
+  r.innerHTML=THEMES[theme].empty;
+  for(let i=0;i<sessions;i++)r.insertAdjacentHTML('beforeend',THEMES[theme].full);
+}
+
+function setCurrentTask(i){
+  currentTaskIdx=currentTaskIdx===i?null:i;
+  renderCurrentTask();renderTasks();saveState();
+}
+
+function renderCurrentTask(){
+  const row=document.getElementById('currentTaskRow');
+  if(!row)return;
+  if(currentTaskIdx===null||!tasks[currentTaskIdx]){
+    row.innerHTML=`<span class="current-task-name empty">${XU().nt}</span>`;
+  }else{
+    const t=tasks[currentTaskIdx];
+    const done=t.completedPours||0;
+    const total=t.pours||1;
+    row.innerHTML=`<span class="current-task-name${t.done?' done':''}">${escHtml(t.text)}</span><span class="current-task-counter">${done} / ${total}</span>`;
+  }
+}
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function renderTasks(){
+  const ul=document.getElementById('taskList');
+  ul.innerHTML='';
+  tasks.forEach((t,i)=>{
+    const li=document.createElement('li');
+    li.className='task-item';
+    const isCurrent=currentTaskIdx===i;
+    const done=t.completedPours||0;
+    li.innerHTML=`<input type="checkbox" class="task-check"${t.done?' checked':''} onchange="toggleTask(${i})"><span class="task-text${t.done?' done':''}">${escHtml(t.text)}</span><span class="task-pours-badge">${done} / ${t.pours||1}</span><button class="task-set-btn${isCurrent?' active':''}" onclick="setCurrentTask(${i})" title="Set as current">▶</button><button class="task-del" onclick="deleteTask(${i})">×</button>`;
+    ul.appendChild(li);
+  });
+}
+
+function addTask(){
+  const inp=document.getElementById('taskInput');
+  const text=inp.value.trim();
+  if(!text)return;
+  const pours=Math.max(1,Math.min(99,parseInt(document.getElementById('poursInput').value)||1));
+  tasks.push({text,done:false,pours,completedPours:0});
+  inp.value='';
+  document.getElementById('poursInput').value=1;
+  renderTasks();saveState();
+}
+
+function toggleTask(i){
+  tasks[i].done=!tasks[i].done;
+  renderTasks();saveState();
+}
+
+function deleteTask(i){
+  tasks.splice(i,1);
+  if(currentTaskIdx===i)currentTaskIdx=null;
+  else if(currentTaskIdx>i)currentTaskIdx--;
+  renderCurrentTask();renderTasks();saveState();
+}
+
+async function loadDonors(){
+  if(!WORKER_URL||WORKER_URL==='YOUR_WORKER_URL')return;
+  try{
+    const res=await fetch(WORKER_URL+'/donors');
+    if(!res.ok)return;
+    const donors=await res.json();
+    const list=document.getElementById('donorsList');
+    list.innerHTML='';
+    donors.slice(0,10).forEach(d=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<span class="donor-name">${escHtml(d.name)}</span><span class="donor-amt">${escHtml(d.currency)} ${escHtml(d.amount)}</span>`;
+      list.appendChild(li);
+    });
+  }catch(_){}
+}
+
+// Init
+loadState();
+remaining=MS(modeIdx);
+document.getElementById('app').className=theme==='coffee'?'theme-coffee':'theme-matcha';
+document.getElementById('tCoffee').className='theme-opt'+(theme==='coffee'?' active':'');
+document.getElementById('tMatcha').className='theme-opt'+(theme==='matcha'?' active':'');
+document.getElementById('sessionCount').textContent=sessions;
+buildSelect();applyTheme();applyLang();syncTimeInputs();
+document.getElementById('timerDisplay').textContent=fmt(remaining);
+document.getElementById('timerMsg').textContent=L().ready;
+rebuildShelf();renderTasks();renderCurrentTask();loadDonors();
+</script>
+</body>
+</html>
