@@ -1,0 +1,7 @@
+name = "brew-focus-donors"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "DONORS_KV"
+id = "9ee683c41ab54d4e8ecdad9e0a6bf1c1"

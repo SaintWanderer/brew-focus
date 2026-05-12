@@ -51,13 +51,19 @@
 }
 </script>
 
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="shortcut icon" href="favicon.svg"/>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:#f0ece4;}
-#app-wrap{width:50vw;min-width:420px;padding:2rem 1.5rem;}
+body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:#f0ece4;transition:background .4s;}
+#app-wrap{width:50vw;min-width:420px;padding:2rem 1.5rem;position:relative;z-index:1;}
 .theme-coffee{--bg:#f5f0e8;--ink:#3b1a1a;--mid:#6b2f2f;--surf:#e8ddd0;}
 .theme-matcha{--bg:#f2f5ee;--ink:#1a2e1a;--mid:#3a5c3a;--surf:#ddebd4;}
+.theme-coffee.dark{--bg:#1e1408;--ink:#e8d4aa;--mid:#9a7045;--surf:#2e1e0c;}
+.theme-matcha.dark{--bg:#101a10;--ink:#b8d4a8;--mid:#4a7a4a;--surf:#182a18;}
+.dark-mode-btn{background:transparent;border:1px solid var(--mid);color:var(--mid);font-family:'Courier New',monospace;font-size:15px;width:34px;height:34px;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s;padding:0;}
+.dark-mode-btn:hover{background:var(--mid);color:var(--bg);}
 #app{background:var(--bg);padding:1.25rem 1.5rem 1.5rem;font-family:'Courier New',monospace;color:var(--ink);transition:background .4s,color .4s;border-radius:4px;}
 .top-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;gap:10px;}
 .theme-pill{display:flex;gap:4px;flex-shrink:0;}
@@ -133,8 +139,8 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 .task-set-btn.active{opacity:1;color:var(--ink);}
 .steam-path{animation:steamUp 2s ease-in-out infinite;transform-origin:bottom center;}
 @keyframes steamUp{0%,100%{opacity:.3;transform:translateY(0);}50%{opacity:.85;transform:translateY(-5px);}}
-.ring-bg{fill:none;stroke-width:5;}
-.ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+.ring-bg{fill:none;stroke-width:3;}
+.ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
 .liquid-anim{transition:height 1s linear,y 1s linear;}
 .donors-section{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--surf);}
 .donors-header{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
@@ -142,8 +148,9 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 .donors-list li{font-size:12px;color:var(--ink);opacity:.75;display:flex;justify-content:space-between;}
 .donors-list li .donor-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:75%;}
 .donors-list li .donor-amt{color:var(--mid);white-space:nowrap;padding-left:8px;}
-.donor-float{position:fixed;font-family:'Courier New',monospace;font-size:15px;letter-spacing:.8px;color:#6b2f2f;pointer-events:none;white-space:nowrap;opacity:0;animation:donorRise var(--dur,5s) ease-out forwards;}
+.donor-float{position:fixed;font-family:'Courier New',monospace;font-size:15px;letter-spacing:.8px;color:var(--float-color,#6b2f2f);pointer-events:none;white-space:nowrap;opacity:0;animation:donorRise var(--dur,5s) ease-out forwards;}
 @keyframes donorRise{0%{opacity:0;transform:translateY(0) translateX(0);}10%{opacity:.65;}50%{transform:translateY(-60px) translateX(4px);}85%{opacity:.4;}100%{opacity:0;transform:translateY(-120px) translateX(-3px);}}
+@keyframes donorRiseHigh{0%{opacity:0;transform:translateY(0) translateX(0);}10%{opacity:.45;}75%{opacity:.25;transform:translateY(-80vh) translateX(4px);}100%{opacity:0;transform:translateY(-110vh) translateX(7px);}}
 @media(max-width:600px){
   body{align-items:flex-start;padding-top:3.5rem;}
   #app-wrap{width:100%;min-width:unset;padding:.75rem;}
@@ -163,10 +170,36 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
   #app-wrap{width:72vw;min-width:380px;}
   .donor-float{display:none;}
 }
+.donation-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:200;}
+.donation-overlay.hidden{display:none;}
+.donation-dialog{background:#f5f0e8;border:1px solid #6b2f2f;border-radius:4px;padding:2rem;max-width:360px;width:90%;font-family:'Courier New',monospace;color:#3b1a1a;}
+.donation-dialog h2{font-family:'Special Elite',serif;font-size:22px;margin-bottom:.5rem;}
+.donation-dialog p{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#6b2f2f;margin-bottom:1.25rem;}
+.donation-name-input{width:100%;font-family:'Courier New',monospace;font-size:14px;padding:9px 12px;border:1px solid #6b2f2f;border-radius:2px;background:#fdf8f0;color:#3b1a1a;outline:none;margin-bottom:1rem;letter-spacing:.3px;}
+.donation-name-input::placeholder{color:#6b2f2f;opacity:.45;}
+.donation-actions{display:flex;gap:8px;justify-content:flex-end;}
+.donation-actions button{font-family:'Courier New',monospace;font-size:12px;letter-spacing:.8px;text-transform:uppercase;padding:8px 18px;border-radius:2px;cursor:pointer;transition:background .15s,color .15s;}
+.donation-submit{background:#3b1a1a;color:#f5f0e8;border:1px solid #3b1a1a;}
+.donation-submit:hover{background:#6b2f2f;border-color:#6b2f2f;}
+.donation-skip{background:transparent;color:#6b2f2f;border:1px solid #6b2f2f;}
+.donation-skip:hover{background:#6b2f2f;color:#f5f0e8;}
 </style>
 </head>
 <body>
 <a id="donateBtn" class="donate-btn" href="https://buy.stripe.com/5kQeVd1nqab45n94i23oA00" target="_blank" rel="noopener">♥ Donate me a pour</a>
+
+<div class="donation-overlay hidden" id="donationOverlay">
+  <div class="donation-dialog">
+    <h2>Thank you! ♥</h2>
+    <p>What name would you like shown on the page?</p>
+    <input class="donation-name-input" id="donationNameInput" type="text" maxlength="50" placeholder="Your name (optional)">
+    <div id="donationError" style="font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#c0392b;margin-bottom:.5rem;display:none;">Please choose a respectful name.</div>
+    <div class="donation-actions">
+      <button class="donation-skip" id="donationSkip">Stay anonymous</button>
+      <button class="donation-submit" id="donationSubmit">Show my name</button>
+    </div>
+  </div>
+</div>
 <div id="app-wrap">
 <div id="app" class="theme-coffee">
   <div class="top-controls">
@@ -178,6 +211,7 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
       <select class="lang-select" id="langSelect" onchange="setLang(this.value)"></select>
       <span class="lang-arrow">▾</span>
     </div>
+    <button class="dark-mode-btn" id="darkBtn" onclick="toggleDark()" title="Toggle dark mode">☾</button>
   </div>
   <div class="top-bar">
     <div>
@@ -300,11 +334,11 @@ const LANGS=[
 
 const THEMES={
   coffee:{rs:'#6b2f2f',rb:'#e8ddd0',st:'#c4956a',
-    draw(b){b.innerHTML=`<path d="M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z" fill="#f5f0e8" stroke="#3b1a1a" stroke-width="2.5" stroke-linejoin="round"/><rect id="liq" x="42" y="144" width="76" height="0" fill="#6b2f2f" clip-path="url(#vClip)" class="liquid-anim"/><rect x="38" y="64" width="84" height="8" rx="3" fill="#f5f0e8" stroke="#3b1a1a" stroke-width="2.5"/><path d="M108 84 Q132 84 132 104 Q132 124 108 124" fill="none" stroke="#3b1a1a" stroke-width="2.5" stroke-linecap="round"/><path d="M108 92 Q122 92 122 104 Q122 116 108 116" fill="none" stroke="#3b1a1a" stroke-width="2"/><ellipse cx="80" cy="148" rx="52" ry="6" fill="#e8ddd0" stroke="#3b1a1a" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z');},
+    draw(b){const dk=darkMode;const fill=dk?'#1e1408':'#f5f0e8';const stroke=dk?'#e8d4aa':'#3b1a1a';const surf=dk?'#2e1e0c':'#e8ddd0';const liq=dk?'#9a7045':'#6b2f2f';b.innerHTML=`<ellipse cx="80" cy="148" rx="52" ry="6" fill="${surf}" stroke="${stroke}" stroke-width="2"/><path d="M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z" fill="${fill}" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round"/><rect id="liq" x="42" y="144" width="76" height="0" fill="${liq}" clip-path="url(#vClip)" class="liquid-anim"/><rect x="38" y="64" width="84" height="8" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/><path d="M108 84 Q132 84 132 104 Q132 124 108 124" fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round"/><path d="M108 92 Q122 92 122 104 Q122 116 108 116" fill="none" stroke="${stroke}" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z');},
     empty:`<svg width="18" height="20" viewBox="0 0 18 20" opacity="0.22"><path d="M2 6 L4 16 Q4.5 18 9 18 Q13.5 18 14 16 L16 6 Z" fill="none" stroke="#3b1a1a" stroke-width="1.5"/><rect x="1" y="4.5" width="16" height="3" rx="1" fill="none" stroke="#3b1a1a" stroke-width="1.5"/><path d="M14 8.5 Q18 8.5 18 12 Q18 15.5 14 15.5" fill="none" stroke="#3b1a1a" stroke-width="1.5"/></svg>`,
     full:`<svg width="18" height="20" viewBox="0 0 18 20"><path d="M2 6 L4 16 Q4.5 18 9 18 Q13.5 18 14 16 L16 6 Z" fill="#6b2f2f" stroke="#3b1a1a" stroke-width="1.5"/><rect x="1" y="4.5" width="16" height="3" rx="1" fill="#6b2f2f" stroke="#3b1a1a" stroke-width="1.5"/><path d="M14 8.5 Q18 8.5 18 12 Q18 15.5 14 15.5" fill="none" stroke="#3b1a1a" stroke-width="1.5"/></svg>`},
   matcha:{rs:'#5a8c3a',rb:'#c8dfc0',st:'#7aab5a',
-    draw(b){b.innerHTML=`<path d="M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z" fill="#f2f5ee" stroke="#1a2e1a" stroke-width="2.2"/><rect id="liq" x="34" y="148" width="92" height="0" fill="#5a8c3a" clip-path="url(#vClip)" class="liquid-anim"/><ellipse cx="80" cy="100" rx="46" ry="14" fill="#f2f5ee" stroke="#1a2e1a" stroke-width="2.2"/><ellipse cx="80" cy="152" rx="52" ry="8" fill="#ddebd4" stroke="#1a2e1a" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z');},
+    draw(b){const dk=darkMode;const fill=dk?'#101a10':'#f2f5ee';const stroke=dk?'#b8d4a8':'#1a2e1a';const surf=dk?'#182a18':'#ddebd4';const liq=dk?'#4a7a4a':'#5a8c3a';b.innerHTML=`<ellipse cx="80" cy="152" rx="52" ry="8" fill="${surf}" stroke="${stroke}" stroke-width="2"/><path d="M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/><rect id="liq" x="34" y="148" width="92" height="0" fill="${liq}" clip-path="url(#vClip)" class="liquid-anim"/><ellipse cx="80" cy="100" rx="46" ry="14" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/>`;document.getElementById('vClipPath').setAttribute('d','M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z');},
     empty:`<svg width="20" height="20" viewBox="0 0 20 20" opacity="0.22"><path d="M2 10 Q2 18 10 18 Q18 18 18 10 Q14 6 10 5 Q6 6 2 10Z" fill="none" stroke="#1a2e1a" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="none" stroke="#1a2e1a" stroke-width="1.5"/></svg>`,
     full:`<svg width="20" height="20" viewBox="0 0 20 20"><path d="M2 10 Q2 18 10 18 Q18 18 18 10 Q14 6 10 5 Q6 6 2 10Z" fill="#5a8c3a" stroke="#1a2e1a" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="#7aab5a" stroke="#1a2e1a" stroke-width="1.5"/></svg>`}
 };
@@ -313,7 +347,7 @@ const EXTRA={
   en:{ct:'Current task',nt:'• no task selected •',sup:'Supporters',donate:'♥ Donate me a pour'},
   zh:{ct:'当前任务',nt:'• 未选择任务 •',sup:'支持者',donate:'♥ 请我喝一杯'},
   hi:{ct:'वर्तमान कार्य',nt:'• कोई कार्य नहीं •',sup:'समर्थक',donate:'♥ एक कप दान करें'},
-  es:{ct:'Tarea actual',nt:'• sin tarea •',sup:'Colaboradores',donate:'♥ Invítame a un café'},
+  es:{ct:'Tarea actual',nt:'• sin tarea •',sup:'Colaboradores',donate:'♥ Invítame un café'},
   fr:{ct:'Tâche en cours',nt:'• aucune tâche •',sup:'Contributeurs',donate:'♥ Offre-moi un café'},
   ar:{ct:'المهمة الحالية',nt:'• لا توجد مهمة •',sup:'الداعمون',donate:'♥ تبرع لي بكوب'},
   bn:{ct:'বর্তমান কাজ',nt:'• কোনো কাজ নেই •',sup:'সমর্থকরা',donate:'♥ আমাকে একটি কাপ দিন'},
@@ -339,7 +373,7 @@ const EXTRA={
 
 const WORKER_URL='https://brew-focus-donors.brew-focus.workers.dev';
 
-let theme='coffee',langIdx=0,modeIdx=0,running=false,interval=null,sessions=0;
+let theme='coffee',langIdx=0,modeIdx=0,running=false,interval=null,sessions=0,darkMode=false;
 let customMins=[25,5,15];
 let tasks=[];
 let currentTaskIdx=null;
@@ -350,6 +384,7 @@ function totalSecs(){return MS(modeIdx);}
 function loadState(){
   try{
     const t=localStorage.getItem('bf_theme');if(t)theme=t;
+    const dk=localStorage.getItem('bf_dark');if(dk)darkMode=dk==='1';
     const l=localStorage.getItem('bf_lang');if(l)langIdx=parseInt(l);
     const s=localStorage.getItem('bf_sessions');if(s)sessions=parseInt(s);
     const m=localStorage.getItem('bf_times');if(m)customMins=JSON.parse(m);
@@ -362,6 +397,7 @@ function loadState(){
 function saveState(){
   try{
     localStorage.setItem('bf_theme',theme);
+    localStorage.setItem('bf_dark',darkMode?'1':'0');
     localStorage.setItem('bf_lang',langIdx);
     localStorage.setItem('bf_sessions',sessions);
     localStorage.setItem('bf_times',JSON.stringify(customMins));
@@ -410,7 +446,7 @@ function applyLang(){
   document.getElementById('lblCups').textContent=l.cups;
   document.getElementById('lblToday').textContent=l.today;
   [0,1,2].forEach(i=>{
-    document.getElementById('tab'+i).textContent=l.tabs[i];
+    document.getElementById('tab'+i).textContent=l.tabs[i].replace(/\d+/,customMins[i]);
     const tl=document.getElementById('timeLabel'+i);if(tl)tl.textContent=l.modes[i];
     const mu=document.getElementById('timeMins'+i);if(mu)mu.textContent=u.mins;
   });
@@ -442,12 +478,30 @@ function updateTime(i,val){
   const v=Math.max(1,Math.min(99,parseInt(val)||1));
   customMins[i]=v;
   document.getElementById('timeInput'+i).value=v;
+  const tabEl=document.getElementById('tab'+i);
+  if(tabEl)tabEl.textContent=tabEl.textContent.replace(/\d+/,v);
   if(modeIdx===i&&!running){
     remaining=MS(i);
     document.getElementById('timerDisplay').textContent=fmt(remaining);
     ring(0);liquid(0);
     document.getElementById('timerMsg').textContent=L().ready;
   }
+  saveState();
+}
+
+function applyDark(){
+  const app=document.getElementById('app');
+  darkMode?app.classList.add('dark'):app.classList.remove('dark');
+  document.getElementById('darkBtn').textContent=darkMode?'☀':'☾';
+  const bodyBg={coffee:{light:'#f0ece4',dark:'#0f0a05'},matcha:{light:'#eef2ea',dark:'#080e08'}};
+  const floatColor={coffee:{light:'#6b2f2f',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',dark:'#a8e0a0'}};
+  document.body.style.background=bodyBg[theme][darkMode?'dark':'light'];
+  document.body.style.setProperty('--float-color',floatColor[theme][darkMode?'dark':'light']);
+}
+
+function toggleDark(){
+  darkMode=!darkMode;
+  applyDark();
   saveState();
 }
 
@@ -466,7 +520,7 @@ function setTheme(t){
   document.getElementById('app').className=t==='coffee'?'theme-coffee':'theme-matcha';
   document.getElementById('tCoffee').className='theme-opt'+(t==='coffee'?' active':'');
   document.getElementById('tMatcha').className='theme-opt'+(t==='matcha'?' active':'');
-  applyTheme();applyLang();rebuildShelf();saveState();
+  applyDark();applyTheme();applyLang();rebuildShelf();saveState();
 }
 
 function toggleTimer(){
@@ -610,16 +664,25 @@ function startDonorFloats(names){
     const vw=window.innerWidth;
     const wrap=document.getElementById('app-wrap');
     const rect=wrap.getBoundingClientRect();
-    const side=Math.random()<.5?'left':'right';
-    let x;
-    if(side==='left'){
+    const roll=Math.random();
+    let x,high=false;
+    if(roll<0.35){
       x=20+Math.random()*Math.max(0,rect.left-80);
-    } else {
+    } else if(roll<0.7){
       x=rect.right+20+Math.random()*Math.max(0,vw-rect.right-100);
+    } else {
+      x=rect.left+Math.random()*rect.width;
+      high=true;
     }
-    const startY=window.innerHeight*(0.55+Math.random()*0.35);
-    const dur=(4+Math.random()*3).toFixed(1)+'s';
-    el.style.cssText=`left:${x}px;top:${startY}px;--dur:${dur}`;
+    const startY=window.innerHeight*(0.6+Math.random()*0.35);
+    const dur=high?(12+Math.random()*6).toFixed(1)+'s':(4+Math.random()*3).toFixed(1)+'s';
+    const floatColors={coffee:{light:'#6b2f2f',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',dark:'#a8e0a0'}};
+    const color=floatColors[theme][darkMode?'dark':'light'];
+    if(high){
+      el.style.cssText=`left:${x}px;top:${startY}px;z-index:0;color:${color};animation:donorRiseHigh ${dur} ease-in forwards;`;
+    } else {
+      el.style.cssText=`left:${x}px;top:${startY}px;color:${color};--dur:${dur}`;
+    }
     document.body.appendChild(el);
     el.addEventListener('animationend',()=>el.remove());
     setTimeout(spawn,1200+Math.random()*2800);
@@ -646,10 +709,53 @@ document.getElementById('app').className=theme==='coffee'?'theme-coffee':'theme-
 document.getElementById('tCoffee').className='theme-opt'+(theme==='coffee'?' active':'');
 document.getElementById('tMatcha').className='theme-opt'+(theme==='matcha'?' active':'');
 document.getElementById('sessionCount').textContent=sessions;
-buildSelect();applyTheme();applyLang();syncTimeInputs();
+buildSelect();applyDark();applyTheme();applyLang();syncTimeInputs();
 document.getElementById('timerDisplay').textContent=fmt(remaining);
 document.getElementById('timerMsg').textContent=L().ready;
 rebuildShelf();renderTasks();renderCurrentTask();loadDonors();
+
+// Donation name dialog
+(function(){
+  const params=new URLSearchParams(window.location.search);
+  const sessionId=params.get('session_id');
+  if(!sessionId)return;
+
+  // Clean URL without reloading
+  history.replaceState({},'',window.location.pathname);
+
+  const overlay=document.getElementById('donationOverlay');
+  const input=document.getElementById('donationNameInput');
+  overlay.classList.remove('hidden');
+  setTimeout(()=>input.focus(),100);
+
+  const bannedClient=['nigger','nigga','chink','spic','kike','wetback','gook','towelhead','raghead','beaner','coon','faggot','fag','dyke','tranny','retard','nazi','kkk','1488','fuck','shit','cunt','bitch','asshole','whore','slut','kill','rape','terrorist'];
+  function isClean(name){
+    const n=name.toLowerCase().replace(/[^a-z0-9\s]/g,'');
+    return !bannedClient.some(t=>n.includes(t));
+  }
+
+  async function submit(name){
+    if(name && !isClean(name)){
+      document.getElementById('donationError').style.display='block';
+      return;
+    }
+    document.getElementById('donationError').style.display='none';
+    overlay.classList.add('hidden');
+    try{
+      await fetch(WORKER_URL+'/submit-name',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({sessionId,name:name||''})
+      });
+      setTimeout(loadDonors,1000);
+    }catch(_){}
+  }
+
+  document.getElementById('donationSubmit').onclick=()=>submit(input.value.trim());
+  document.getElementById('donationSkip').onclick=()=>submit('');
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')submit(input.value.trim());});
+  overlay.addEventListener('click',e=>{if(e.target===overlay)submit('');});
+})();
 </script>
 </body>
 </html>
