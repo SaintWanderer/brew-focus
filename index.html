@@ -187,16 +187,16 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 </head>
 <body>
 <a id="donateBtn" class="donate-btn" href="https://buy.stripe.com/5kQeVd1nqab45n94i23oA00" target="_blank" rel="noopener">♥ Donate me a pour</a>
-
 <div class="donation-overlay hidden" id="donationOverlay">
   <div class="donation-dialog">
     <h2>Thank you! ♥</h2>
     <p>What name would you like shown on the page?</p>
+    <p style="font-size:12px;opacity:.7;margin-top:-.4rem;">Your name will be shown to everyone, so please be mindful of what you use.</p>
     <input class="donation-name-input" id="donationNameInput" type="text" maxlength="50" placeholder="Your name (optional)">
     <div id="donationError" style="font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#c0392b;margin-bottom:.5rem;display:none;">Please choose a respectful name.</div>
     <div class="donation-actions">
       <button class="donation-skip" id="donationSkip">Stay anonymous</button>
-      <button class="donation-submit" id="donationSubmit">Show my name</button>
+      <button class="donation-submit" id="donationSubmit">Save my name</button>
     </div>
   </div>
 </div>
@@ -497,6 +497,7 @@ function applyDark(){
   const floatColor={coffee:{light:'#6b2f2f',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',dark:'#a8e0a0'}};
   document.body.style.background=bodyBg[theme][darkMode?'dark':'light'];
   document.body.style.setProperty('--float-color',floatColor[theme][darkMode?'dark':'light']);
+  const vb=document.getElementById('vesselBody');if(vb)THEMES[theme].draw(vb);
 }
 
 function toggleDark(){
