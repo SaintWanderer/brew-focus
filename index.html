@@ -4,8 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Brew & Focus — Free Pomodoro Timer with Task Tracking</title>
-<meta name="description" content="Brew & Focus is a free Pomodoro timer for deep work. Use the 25/5 focus technique, track your tasks, and stay productive — themed around coffee and matcha rituals. No sign-up, no ads."/>
+<title>Free Pomodoro Timer & Task Tracker | Brew & Focus</title>
+<meta name="description" content="Free Pomodoro timer for deep work. Use the 25/5 technique, track daily tasks, and stay focused — coffee & matcha themes, dark mode, 25 languages. No sign-up, works offline."/>
 <meta name="keywords" content="pomodoro timer, focus timer, productivity app, task tracker, free pomodoro, coffee timer, matcha, work timer, study timer, time management"/>
 <meta name="author" content="Brew & Focus"/>
 <meta name="robots" content="index, follow"/>
@@ -14,7 +14,7 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://brew-focus.com/"/>
-<meta property="og:title" content="Brew & Focus — Free Pomodoro Timer with Task Tracking"/>
+<meta property="og:title" content="Free Pomodoro Timer & Task Tracker | Brew & Focus"/>
 <meta property="og:description" content="A free Pomodoro timer for deep work — themed around coffee and matcha rituals. Track tasks, count focus sessions, stay productive. No sign-up, no ads."/>
 <meta property="og:image" content="https://brew-focus.com/og-image.png"/>
 <meta property="og:locale" content="en_US"/>
@@ -23,7 +23,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:url" content="https://brew-focus.com/"/>
-<meta name="twitter:title" content="Brew & Focus — Free Pomodoro Timer with Task Tracking"/>
+<meta name="twitter:title" content="Free Pomodoro Timer & Task Tracker | Brew & Focus"/>
 <meta name="twitter:description" content="A free Pomodoro timer for deep work — themed around coffee and matcha rituals. Track tasks, count focus sessions, stay productive. No sign-up, no ads."/>
 <meta name="twitter:image" content="https://brew-focus.com/og-image.png"/>
 
@@ -102,7 +102,9 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
 #app-wrap{width:50vw;min-width:420px;padding:2rem 1.5rem;position:relative;z-index:1;}
 .theme-coffee{--bg:#f5f0e8;--ink:#3b1a1a;--mid:#6b2f2f;--surf:#e8ddd0;}
 .theme-matcha{--bg:#f2f5ee;--ink:#1a2e1a;--mid:#3a5c3a;--surf:#ddebd4;}
+.theme-coffee.mid{--bg:#2d1508;--ink:#f2d498;--mid:#b07838;--surf:#3c2210;}
 .theme-coffee.dark{--bg:#1e1408;--ink:#e8d4aa;--mid:#9a7045;--surf:#2e1e0c;}
+.theme-matcha.mid{--bg:#1c2e18;--ink:#b8d8a0;--mid:#5a9050;--surf:#253c20;}
 .theme-matcha.dark{--bg:#101a10;--ink:#b8d4a8;--mid:#4a7a4a;--surf:#182a18;}
 .dark-mode-btn{background:transparent;border:1px solid var(--mid);color:var(--mid);font-family:'Courier New',monospace;font-size:15px;width:34px;height:34px;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s;padding:0;}
 .dark-mode-btn:hover{background:var(--mid);color:var(--bg);}
@@ -350,7 +352,7 @@ const LANGS=[
   {code:'en',label:'🇬🇧 English',tasks:'Tasks',addTask:'Add a task…',add:'Add',mins:'min',coffee:{brand:'Brew & Focus',sub:'• each session is a pour',cups:'Cups poured',today:"Today's cups",tabs:['Espresso (25m)','Short drip (5m)','Cold brew (15m)'],modes:['Espresso shot','Drip break','Cold brew rest'],start:'Start brewing',pause:'Pause',reset:'Reset',ready:'• ready to brew •',paused:'• paused •',done:'• cup is ready! •',msgs:{0:['• grinding beans •','• water heating •','• nearly there •','• almost done •'],1:['• sip and breathe •','• stretch a little •','• back soon •'],2:['• patience now •','• steeping slowly •','• almost ready •']}},matcha:{brand:'Whisk & Stillness',sub:'• each session is a bowl',cups:'Bowls whisked',today:"Today's bowls",tabs:['Ceremony (25m)','Sip pause (5m)','Rest (15m)'],modes:['Ceremonial bowl','Sip pause','Resting mind'],start:'Begin ceremony',pause:'Pause',reset:'Reset',ready:'• ready to whisk •',paused:'• paused — stillness •',done:'• bowl is ready! •',msgs:{0:['• sifting matcha •','• water at 80°C •','• whisking steady •','• almost there •'],1:['• rest your hands •','• breathe deeply •','• return slowly •'],2:['• stillness holds •','• let thoughts steep •','• nearly done •']}}},
   {code:'zh',label:'🇨🇳 中文',tasks:'任务',addTask:'添加任务…',add:'添加',mins:'分',coffee:{brand:'专注时光',sub:'• 每次专注都是一次冲泡',cups:'已冲泡杯数',today:'今日杯数',tabs:['浓缩（25分）','短休（5分）','冷萃（15分）'],modes:['浓缩咖啡','短暂休息','冷萃休息'],start:'开始冲泡',pause:'暂停',reset:'重置',ready:'• 准备冲泡 •',paused:'• 已暂停 •',done:'• 咖啡好了！•',msgs:{0:['• 研磨咖啡豆 •','• 水正在加热 •','• 快好了 •','• 即将完成 •'],1:['• 享受咖啡 •','• 深呼吸 •','• 很快回来 •'],2:['• 冷萃需耐心 •','• 正在浸泡 •','• 快好了 •']}},matcha:{brand:'抹茶与静心',sub:'• 每次专注都是一碗',cups:'已点碗数',today:'今日碗数',tabs:['茶道（25分）','小憩（5分）','休息（15分）'],modes:['茶道之碗','小憩','静心'],start:'开始茶道',pause:'暂停',reset:'重置',ready:'• 准备点茶 •',paused:'• 已暂停 •',done:'• 抹茶备好！•',msgs:{0:['• 过筛抹茶 •','• 水温80°C •','• 稳定打泡 •','• 快完成了 •'],1:['• 放松双手 •','• 深呼吸 •','• 缓缓归来 •'],2:['• 保持静心 •','• 让思绪沉淀 •','• 快完成了 •']}}},
   {code:'hi',label:'🇮🇳 हिन्दी',tasks:'कार्य',addTask:'कार्य जोड़ें…',add:'जोड़ें',mins:'मि',coffee:{brand:'Brew & Focus',sub:'• हर सत्र एक कप है',cups:'बनाए गए कप',today:'आज के कप',tabs:['एस्प्रेसो (25मि)','छोटा विराम (5मि)','कोल्ड ब्रू (15मि)'],modes:['एस्प्रेसो शॉट','छोटा विराम','कोल्ड ब्रू विराम'],start:'शुरू करें',pause:'रोकें',reset:'रीसेट',ready:'• तैयार है •',paused:'• रुका हुआ है •',done:'• कप तैयार! •',msgs:{0:['• बीन्स पीस रहे हैं •','• पानी गर्म हो रहा है •','• लगभग तैयार •','• बस थोड़ा और •'],1:['• एक घूंट लें •','• खिंचाव करें •','• जल्दी वापस •'],2:['• धैर्य रखें •','• भिगोने दें •','• लगभग तैयार •']}},matcha:{brand:'माचा & शांति',sub:'• हर सत्र एक कटोरी है',cups:'बनाई गई कटोरियाँ',today:'आज की कटोरियाँ',tabs:['समारोह (25मि)','विराम (5मि)','आराम (15मि)'],modes:['समारोह कटोरी','विराम','मन को आराम'],start:'समारोह शुरू करें',pause:'रोकें',reset:'रीसेट',ready:'• फेंटने के लिए तैयार •',paused:'• रुका — शांति •',done:'• कटोरी तैयार! •',msgs:{0:['• माचा छान रहे हैं •','• पानी 80°C •','• स्थिर फेंटें •','• लगभग तैयार •'],1:['• हाथों को आराम •','• गहरी सांस लें •','• धीरे वापस •'],2:['• शांति बनाए रखें •','• विचार थिर हों •','• लगभग तैयार •']}}},
-  {code:'es',label:'🇪🇸 Español',tasks:'Tareas',addTask:'Añadir tarea…',add:'Añadir',mins:'min',coffee:{brand:'Brew & Focus',sub:'• cada sesión es un vertido',cups:'Tazas servidas',today:'Tazas de hoy',tabs:['Espresso (25m)','Pausa corta (5m)','Frío largo (15m)'],modes:['Tiro de espresso','Pausa rápida','Descanso frío'],start:'Empezar',pause:'Pausar',reset:'Reiniciar',ready:'• listo para preparar •',paused:'• en pausa •',done:'• ¡taza lista! •',msgs:{0:['• moliendo granos •','• agua calentando •','• casi listo •','• un momento más •'],1:['• disfruta el sorbo •','• estírate un poco •','• volvemos pronto •'],2:['• paciencia •','• reposando •','• casi listo •']}},matcha:{brand:'Batir & Calma',sub:'• cada sesión es un cuenco',cups:'Cuencos batidos',today:'Cuencos de hoy',tabs:['Ceremonia (25m)','Pausa (5m)','Descanso (15m)'],modes:['Cuenco ceremonial','Pausa serena','Mente en reposo'],start:'Iniciar ceremonia',pause:'Pausar',reset:'Reiniciar',ready:'• listo para batir •',paused:'• en pausa — quietud •',done:'• ¡cuenco listo! •',msgs:{0:['• tamizando matcha •','• agua a 80°C •','• batiendo con calma •','• casi listo •'],1:['• descansa las manos •','• respira hondo •','• regresa con calma •'],2:['• quietud presente •','• deja reposar •','• casi terminado •']}}},
+  {code:'es',label:'🇲🇽 Español',tasks:'Tareas',addTask:'Añadir tarea…',add:'Añadir',mins:'min',coffee:{brand:'Brew & Focus',sub:'• cada sesión es un vertido',cups:'Tazas servidas',today:'Tazas de hoy',tabs:['Espresso (25m)','Pausa corta (5m)','Frío largo (15m)'],modes:['Tiro de espresso','Pausa rápida','Descanso frío'],start:'Empezar',pause:'Pausar',reset:'Reiniciar',ready:'• listo para preparar •',paused:'• en pausa •',done:'• ¡taza lista! •',msgs:{0:['• moliendo granos •','• agua calentando •','• casi listo •','• un momento más •'],1:['• disfruta el sorbo •','• estírate un poco •','• volvemos pronto •'],2:['• paciencia •','• reposando •','• casi listo •']}},matcha:{brand:'Batir & Calma',sub:'• cada sesión es un cuenco',cups:'Cuencos batidos',today:'Cuencos de hoy',tabs:['Ceremonia (25m)','Pausa (5m)','Descanso (15m)'],modes:['Cuenco ceremonial','Pausa serena','Mente en reposo'],start:'Iniciar ceremonia',pause:'Pausar',reset:'Reiniciar',ready:'• listo para batir •',paused:'• en pausa — quietud •',done:'• ¡cuenco listo! •',msgs:{0:['• tamizando matcha •','• agua a 80°C •','• batiendo con calma •','• casi listo •'],1:['• descansa las manos •','• respira hondo •','• regresa con calma •'],2:['• quietud presente •','• deja reposar •','• casi terminado •']}}},
   {code:'fr',label:'🇫🇷 Français',tasks:'Tâches',addTask:'Ajouter une tâche…',add:'Ajouter',mins:'min',coffee:{brand:'Brew & Focus',sub:'• chaque session est une infusion',cups:'Tasses servies',today:"Tasses d'aujourd'hui",tabs:['Espresso (25m)','Courte pause (5m)','Infusion froide (15m)'],modes:["Shot d'espresso",'Pause rapide','Pause froide'],start:'Commencer',pause:'Pause',reset:'Réinitialiser',ready:'• prêt à infuser •',paused:'• en pause •',done:'• la tasse est prête ! •',msgs:{0:['• mouture en cours •','• eau en chauffe •','• presque prêt •','• encore un instant •'],1:['• savourez •','• étirez-vous •','• de retour bientôt •'],2:['• patience •','• en train de reposer •','• presque prêt •']}},matcha:{brand:'Fouet & Sérénité',sub:'• chaque session est un bol',cups:'Bols préparés',today:"Bols d'aujourd'hui",tabs:['Cérémonie (25m)','Pause (5m)','Repos (15m)'],modes:['Bol cérémonial','Pause sereine','Esprit en repos'],start:'Commencer la cérémonie',pause:'Pause',reset:'Réinitialiser',ready:'• prêt à fouetter •',paused:'• en pause — sérénité •',done:'• le bol est prêt ! •',msgs:{0:['• tamisant le matcha •','• eau à 80°C •','• fouettant calmement •','• presque prêt •'],1:['• reposez vos mains •','• respirez profondément •','• revenez doucement •'],2:['• gardez le calme •','• laissez reposer •','• presque terminé •']}}},
   {code:'ar',label:'🇸🇦 العربية',tasks:'المهام',addTask:'أضف مهمة…',add:'إضافة',mins:'د',coffee:{brand:'تركيز وقهوة',sub:'• كل جلسة هي صبّة',cups:'أكواب مُعدّة',today:'أكواب اليوم',tabs:['إسبريسو (٢٥د)','استراحة قصيرة (٥د)','قهوة باردة (١٥د)'],modes:['جرعة إسبريسو','استراحة سريعة','راحة القهوة الباردة'],start:'ابدأ التحضير',pause:'توقف',reset:'إعادة',ready:'• جاهز للتحضير •',paused:'• متوقف مؤقتاً •',done:'• الكوب جاهز! •',msgs:{0:['• طحن الحبوب •','• تسخين الماء •','• يكاد ينتهي •','• لحظات أخيرة •'],1:['• استمتع بالرشفة •','• تمدد قليلاً •','• نعود قريباً •'],2:['• اصبر قليلاً •','• ينقع ببطء •','• يكاد يكتمل •']}},matcha:{brand:'ماتشا وسكينة',sub:'• كل جلسة هي وعاء',cups:'أوعية مُحضَّرة',today:'أوعية اليوم',tabs:['مراسم (٢٥د)','استراحة (٥د)','راحة (١٥د)'],modes:['وعاء المراسم','استراحة هادئة','راحة الذهن'],start:'ابدأ المراسم',pause:'توقف',reset:'إعادة',ready:'• جاهز للخفق •',paused:'• متوقف — سكينة •',done:'• الوعاء جاهز! •',msgs:{0:['• نخل الماتشا •','• الماء عند ٨٠°م •','• خفق منتظم •','• يكاد ينتهي •'],1:['• أرح يديك •','• تنفس بعمق •','• عد بهدوء •'],2:['• حافظ على الهدوء •','• دع الأفكار تستقر •','• يكاد يكتمل •']}}},
   {code:'bn',label:'🇧🇩 বাংলা',tasks:'কাজ',addTask:'কাজ যোগ করুন…',add:'যোগ করুন',mins:'মি',coffee:{brand:'Brew & Focus',sub:'• প্রতিটি সেশন একটি কাপ',cups:'বানানো কাপ',today:'আজকের কাপ',tabs:['এস্প্রেসো (২৫মি)','ছোট বিরতি (৫মি)','কোল্ড ব্রু (১৫মি)'],modes:['এস্প্রেসো শট','ছোট বিরতি','কোল্ড ব্রু বিরতি'],start:'শুরু করুন',pause:'থামুন',reset:'রিসেট',ready:'• তৈরি আছি •',paused:'• বিরতিতে •',done:'• কাপ তৈরি! •',msgs:{0:['• বিনস পিষছি •','• জল গরম হচ্ছে •','• প্রায় হয়ে গেছে •','• একটু আর •'],1:['• একটু চুমুক দিন •','• একটু ব্যায়াম •','• শীঘ্রই ফিরব •'],2:['• ধৈর্য ধরুন •','• ভিজছে •','• প্রায় হয়ে গেছে •']}},matcha:{brand:'মাচা ও শান্তি',sub:'• প্রতিটি সেশন একটি বাটি',cups:'বানানো বাটি',today:'আজকের বাটি',tabs:['অনুষ্ঠান (২৫মি)','বিরতি (৫মি)','আরাম (১৫মি)'],modes:['আনুষ্ঠানিক বাটি','বিরতি','মনের আরাম'],start:'অনুষ্ঠান শুরু করুন',pause:'থামুন',reset:'রিসেট',ready:'• ফেটানোর জন্য তৈরি •',paused:'• বিরতিতে — শান্তি •',done:'• বাটি তৈরি! •',msgs:{0:['• মাচা চালছি •','• জল ৮০°সে •','• নিয়মিত ফেটাচ্ছি •','• প্রায় হয়ে গেছে •'],1:['• হাত বিশ্রাম দিন •','• গভীর শ্বাস নিন •','• ধীরে ফিরুন •'],2:['• শান্ত থাকুন •','• মন স্থির করুন •','• প্রায় শেষ •']}}},
@@ -376,11 +378,11 @@ const LANGS=[
 
 const THEMES={
   coffee:{rs:'#6b2f2f',rb:'#e8ddd0',st:'#c4956a',
-    draw(b){const dk=darkMode;const fill=dk?'#1e1408':'#f5f0e8';const stroke=dk?'#e8d4aa':'#3b1a1a';const surf=dk?'#2e1e0c':'#e8ddd0';const liq=dk?'#9a7045':'#6b2f2f';b.innerHTML=`<ellipse cx="80" cy="148" rx="52" ry="6" fill="${surf}" stroke="${stroke}" stroke-width="2"/><path d="M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z" fill="${fill}" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round"/><rect id="liq" x="42" y="144" width="76" height="0" fill="${liq}" clip-path="url(#vClip)" class="liquid-anim"/><rect x="38" y="64" width="84" height="8" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/><path d="M108 84 Q132 84 132 104 Q132 124 108 124" fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round"/><path d="M108 92 Q122 92 122 104 Q122 116 108 116" fill="none" stroke="${stroke}" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z');},
+    draw(b){const dk=darkMode!=='light';const fill=dk?'#1e1408':'#f5f0e8';const stroke=dk?'#e8d4aa':'#3b1a1a';const surf=dk?'#2e1e0c':'#e8ddd0';const liq=dk?'#9a7045':'#6b2f2f';b.innerHTML=`<ellipse cx="80" cy="148" rx="52" ry="6" fill="${surf}" stroke="${stroke}" stroke-width="2"/><path d="M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z" fill="${fill}" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round"/><rect id="liq" x="42" y="144" width="76" height="0" fill="${liq}" clip-path="url(#vClip)" class="liquid-anim"/><rect x="38" y="64" width="84" height="8" rx="3" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/><path d="M108 84 Q132 84 132 104 Q132 124 108 124" fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linecap="round"/><path d="M108 92 Q122 92 122 104 Q122 116 108 116" fill="none" stroke="${stroke}" stroke-width="2"/>`;document.getElementById('vClipPath').setAttribute('d','M42 68 L52 138 Q54 144 80 144 Q106 144 108 138 L118 68 Z');},
     empty:`<svg width="18" height="20" viewBox="0 0 18 20" opacity="0.22"><path d="M2 6 L4 16 Q4.5 18 9 18 Q13.5 18 14 16 L16 6 Z" fill="none" stroke="#3b1a1a" stroke-width="1.5"/><rect x="1" y="4.5" width="16" height="3" rx="1" fill="none" stroke="#3b1a1a" stroke-width="1.5"/><path d="M14 8.5 Q18 8.5 18 12 Q18 15.5 14 15.5" fill="none" stroke="#3b1a1a" stroke-width="1.5"/></svg>`,
     full:`<svg width="18" height="20" viewBox="0 0 18 20"><path d="M2 6 L4 16 Q4.5 18 9 18 Q13.5 18 14 16 L16 6 Z" fill="#6b2f2f" stroke="#3b1a1a" stroke-width="1.5"/><rect x="1" y="4.5" width="16" height="3" rx="1" fill="#6b2f2f" stroke="#3b1a1a" stroke-width="1.5"/><path d="M14 8.5 Q18 8.5 18 12 Q18 15.5 14 15.5" fill="none" stroke="#3b1a1a" stroke-width="1.5"/></svg>`},
   matcha:{rs:'#5a8c3a',rb:'#c8dfc0',st:'#7aab5a',
-    draw(b){const dk=darkMode;const fill=dk?'#101a10':'#f2f5ee';const stroke=dk?'#b8d4a8':'#1a2e1a';const surf=dk?'#182a18':'#ddebd4';const liq=dk?'#4a7a4a':'#5a8c3a';b.innerHTML=`<ellipse cx="80" cy="152" rx="52" ry="8" fill="${surf}" stroke="${stroke}" stroke-width="2"/><path d="M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/><rect id="liq" x="34" y="148" width="92" height="0" fill="${liq}" clip-path="url(#vClip)" class="liquid-anim"/><ellipse cx="80" cy="100" rx="46" ry="14" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/>`;document.getElementById('vClipPath').setAttribute('d','M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z');},
+    draw(b){const dk=darkMode!=='light';const fill=dk?'#101a10':'#f2f5ee';const stroke=dk?'#b8d4a8':'#1a2e1a';const surf=dk?'#182a18':'#ddebd4';const liq=dk?'#4a7a4a':'#5a8c3a';b.innerHTML=`<ellipse cx="80" cy="152" rx="52" ry="8" fill="${surf}" stroke="${stroke}" stroke-width="2"/><path d="M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/><rect id="liq" x="34" y="148" width="92" height="0" fill="${liq}" clip-path="url(#vClip)" class="liquid-anim"/><ellipse cx="80" cy="100" rx="46" ry="14" fill="${fill}" stroke="${stroke}" stroke-width="2.2"/>`;document.getElementById('vClipPath').setAttribute('d','M34 100 Q34 148 80 148 Q126 148 126 100 Q110 72 80 68 Q50 72 34 100 Z');},
     empty:`<svg width="20" height="20" viewBox="0 0 20 20" opacity="0.22"><path d="M2 10 Q2 18 10 18 Q18 18 18 10 Q14 6 10 5 Q6 6 2 10Z" fill="none" stroke="#1a2e1a" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="none" stroke="#1a2e1a" stroke-width="1.5"/></svg>`,
     full:`<svg width="20" height="20" viewBox="0 0 20 20"><path d="M2 10 Q2 18 10 18 Q18 18 18 10 Q14 6 10 5 Q6 6 2 10Z" fill="#5a8c3a" stroke="#1a2e1a" stroke-width="1.5"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="#7aab5a" stroke="#1a2e1a" stroke-width="1.5"/></svg>`}
 };
@@ -415,7 +417,7 @@ const EXTRA={
 
 const WORKER_URL='https://brew-focus-donors.brew-focus.workers.dev';
 
-let theme='coffee',langIdx=0,modeIdx=0,running=false,interval=null,sessions=0,darkMode=false;
+let theme='coffee',langIdx=0,modeIdx=0,running=false,interval=null,sessions=0,darkMode='light';
 let customMins=[25,5,15];
 let tasks=[];
 let currentTaskIdx=null;
@@ -426,7 +428,7 @@ function totalSecs(){return MS(modeIdx);}
 function loadState(){
   try{
     const t=localStorage.getItem('bf_theme');if(t)theme=t;
-    const dk=localStorage.getItem('bf_dark');if(dk)darkMode=dk==='1';
+    const dk=localStorage.getItem('bf_dark');if(dk)darkMode=dk==='dark'?'dark':dk==='mid'?'mid':dk==='1'?'dark':'light';
     const l=localStorage.getItem('bf_lang');if(l)langIdx=parseInt(l);
     const s=localStorage.getItem('bf_sessions');if(s)sessions=parseInt(s);
     const m=localStorage.getItem('bf_times');if(m)customMins=JSON.parse(m);
@@ -439,7 +441,7 @@ function loadState(){
 function saveState(){
   try{
     localStorage.setItem('bf_theme',theme);
-    localStorage.setItem('bf_dark',darkMode?'1':'0');
+    localStorage.setItem('bf_dark',darkMode);
     localStorage.setItem('bf_lang',langIdx);
     localStorage.setItem('bf_sessions',sessions);
     localStorage.setItem('bf_times',JSON.stringify(customMins));
@@ -533,17 +535,20 @@ function updateTime(i,val){
 
 function applyDark(){
   const app=document.getElementById('app');
-  darkMode?app.classList.add('dark'):app.classList.remove('dark');
-  document.getElementById('darkBtn').textContent=darkMode?'☀':'☾';
-  const bodyBg={coffee:{light:'#f0ece4',dark:'#0f0a05'},matcha:{light:'#eef2ea',dark:'#080e08'}};
-  const floatColor={coffee:{light:'#6b2f2f',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',dark:'#a8e0a0'}};
-  document.body.style.background=bodyBg[theme][darkMode?'dark':'light'];
-  document.body.style.setProperty('--float-color',floatColor[theme][darkMode?'dark':'light']);
+  app.classList.remove('mid','dark');
+  if(darkMode==='mid')app.classList.add('mid');
+  else if(darkMode==='dark')app.classList.add('dark');
+  const icons={light:'☾',mid:'◑',dark:'☀'};
+  document.getElementById('darkBtn').textContent=icons[darkMode];
+  const bodyBg={coffee:{light:'#f0ece4',mid:'#2d1508',dark:'#0f0a05'},matcha:{light:'#eef2ea',mid:'#1c2e18',dark:'#080e08'}};
+  const floatColor={coffee:{light:'#6b2f2f',mid:'#f0d4a0',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',mid:'#a8e0a0',dark:'#a8e0a0'}};
+  document.body.style.background=bodyBg[theme][darkMode];
+  document.body.style.setProperty('--float-color',floatColor[theme][darkMode]);
   const vb=document.getElementById('vesselBody');if(vb)THEMES[theme].draw(vb);
 }
 
 function toggleDark(){
-  darkMode=!darkMode;
+  darkMode=darkMode==='light'?'mid':darkMode==='mid'?'dark':'light';
   applyDark();
   saveState();
 }
@@ -719,8 +724,8 @@ function startDonorFloats(names){
     }
     const startY=window.innerHeight*(0.6+Math.random()*0.35);
     const dur=high?(12+Math.random()*6).toFixed(1)+'s':(4+Math.random()*3).toFixed(1)+'s';
-    const floatColors={coffee:{light:'#6b2f2f',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',dark:'#a8e0a0'}};
-    const color=floatColors[theme][darkMode?'dark':'light'];
+    const floatColors={coffee:{light:'#6b2f2f',mid:'#f0d4a0',dark:'#f0d4a0'},matcha:{light:'#3a5c3a',mid:'#a8e0a0',dark:'#a8e0a0'}};
+    const color=floatColors[theme][darkMode];
     if(high){
       el.style.cssText=`left:${x}px;top:${startY}px;z-index:0;color:${color};animation:donorRiseHigh ${dur} ease-in forwards;`;
     } else {
@@ -800,8 +805,21 @@ rebuildShelf();renderTasks();renderCurrentTask();loadDonors();
   overlay.addEventListener('click',e=>{if(e.target===overlay)submit('');});
 })();
 </script>
-<section style="max-width:520px;margin:2.5rem auto 1.5rem;padding:0 1.5rem;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;text-align:center;opacity:.55;">
-  <p>Brew &amp; Focus is a free Pomodoro timer built around the ritual of brewing — coffee or matcha, your choice. Each 25-minute focus session is a pour; each break, a moment to breathe. Add your tasks, watch your session count grow, and let the rhythm of your brew keep you in flow. No account required, no ads, no distractions — just you and your work.</p>
+<section style="max-width:580px;margin:3rem auto 2rem;padding:0 1.5rem;font-family:'Courier New',monospace;font-size:12px;line-height:1.9;color:#6b5040;opacity:.7;">
+  <h2 style="font-size:14px;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:.75rem;">A Pomodoro Timer Built Around Your Brew Ritual</h2>
+  <p>Brew &amp; Focus is a free Pomodoro timer for anyone who takes their focus as seriously as their morning brew. Whether you're a developer, writer, student, or creative, the 25/5 technique helps you do your best work — one session at a time. No account, no ads, no distractions.</p>
+
+  <h3 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:1.25rem 0 .5rem;">How the Pomodoro Technique Works</h3>
+  <p>Work for 25 focused minutes, take a 5-minute break, repeat. After four sessions, rest for 15 minutes. This rhythm prevents mental fatigue and keeps you consistently productive across a full day. Brew &amp; Focus maps each interval to a brewing ritual — espresso for deep work, a short drip for breaks, a cold brew for the long rest.</p>
+
+  <h3 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:1.25rem 0 .5rem;">Coffee &amp; Matcha Themes</h3>
+  <p>Choose between two brewing themes that shape the entire experience. The Coffee theme follows the ritual of an espresso shot — measured, intentional, focused. The Matcha theme mirrors the Japanese tea ceremony — slow, deliberate, calm. Both themes include dark mode and an animated cup that fills as your session progresses.</p>
+
+  <h3 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:1.25rem 0 .5rem;">Task Tracking Built In</h3>
+  <p>Add your tasks for the day, set how many sessions each one needs, and check them off as you go. Brew &amp; Focus tracks completed sessions so you can see your progress at a glance. Everything is saved locally in your browser — nothing leaves your device.</p>
+
+  <h3 style="font-size:12px;letter-spacing:1px;text-transform:uppercase;margin:1.25rem 0 .5rem;">Customisable, Free, &amp; Works Offline</h3>
+  <p>Adjust focus, short break, and long break durations to match your workflow. Available in 25 languages. Works on any device — phone, tablet, or desktop — without installation. Once loaded, the timer runs entirely offline. Brew &amp; Focus is free to use; if it helps your day, you can support it with a small donation.</p>
 </section>
 </body>
 </html>
