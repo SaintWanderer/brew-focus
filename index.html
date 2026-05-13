@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>Brew & Focus — Free Pomodoro Timer with Task Tracking</title>
-<meta name="description" content="Brew & Focus is a free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive — no sign-up required."/>
+<meta name="description" content="Brew & Focus is a free Pomodoro timer for deep work. Use the 25/5 focus technique, track your tasks, and stay productive — themed around coffee and matcha rituals. No sign-up, no ads."/>
 <meta name="keywords" content="pomodoro timer, focus timer, productivity app, task tracker, free pomodoro, coffee timer, matcha, work timer, study timer, time management"/>
 <meta name="author" content="Brew & Focus"/>
 <meta name="robots" content="index, follow"/>
@@ -15,7 +15,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://brew-focus.com/"/>
 <meta property="og:title" content="Brew & Focus — Free Pomodoro Timer with Task Tracking"/>
-<meta property="og:description" content="A free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive — no sign-up required."/>
+<meta property="og:description" content="A free Pomodoro timer for deep work — themed around coffee and matcha rituals. Track tasks, count focus sessions, stay productive. No sign-up, no ads."/>
 <meta property="og:image" content="https://brew-focus.com/og-image.png"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Brew & Focus"/>
@@ -24,7 +24,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:url" content="https://brew-focus.com/"/>
 <meta name="twitter:title" content="Brew & Focus — Free Pomodoro Timer with Task Tracking"/>
-<meta name="twitter:description" content="A free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive — no sign-up required."/>
+<meta name="twitter:description" content="A free Pomodoro timer for deep work — themed around coffee and matcha rituals. Track tasks, count focus sessions, stay productive. No sign-up, no ads."/>
 <meta name="twitter:image" content="https://brew-focus.com/og-image.png"/>
 
 <!-- Theme & App -->
@@ -35,20 +35,62 @@
 
 <!-- Structured Data -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "Brew & Focus",
-  "url": "https://brew-focus.com/",
-  "description": "A free Pomodoro timer inspired by coffee and matcha rituals. Track tasks, count focus sessions, and stay productive.",
-  "applicationCategory": "ProductivityApplication",
-  "operatingSystem": "Any",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Brew & Focus",
+    "url": "https://brew-focus.com/",
+    "description": "A free Pomodoro timer for deep work, themed around coffee and matcha rituals. Track tasks, count focus sessions, and stay productive with no sign-up required.",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "featureList": ["Pomodoro timer", "Task tracking", "Coffee and matcha themes", "Dark mode", "25 language support"],
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the Pomodoro technique?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Pomodoro technique is a time management method where you work in focused 25-minute intervals (called Pomodoros) separated by short 5-minute breaks. After four sessions you take a longer 15-minute break. It helps maintain concentration and avoid mental fatigue."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Brew & Focus free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, Brew & Focus is completely free. No account or sign-up is required. You can optionally support the project with a small donation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Brew & Focus work offline?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Once the page is loaded, the timer runs entirely in your browser with no internet connection needed. Your tasks and session count are saved locally."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I customise the timer durations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can set custom durations for the focus session, short break, and long break directly in the settings panel — the timer and tab labels update instantly."
+        }
+      }
+    ]
   }
-}
+]
 </script>
 
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
@@ -215,7 +257,7 @@ body{min-height:100vh;display:flex;justify-content:center;align-items:flex-start
   </div>
   <div class="top-bar">
     <div>
-      <div class="brand" id="brandName"></div>
+      <h1 class="brand" id="brandName"></h1>
       <div class="subtitle" id="lblSubtitle"></div>
     </div>
     <div>
@@ -758,5 +800,8 @@ rebuildShelf();renderTasks();renderCurrentTask();loadDonors();
   overlay.addEventListener('click',e=>{if(e.target===overlay)submit('');});
 })();
 </script>
+<section style="max-width:520px;margin:2.5rem auto 1.5rem;padding:0 1.5rem;font-family:'Courier New',monospace;font-size:12px;line-height:1.8;text-align:center;opacity:.55;">
+  <p>Brew &amp; Focus is a free Pomodoro timer built around the ritual of brewing — coffee or matcha, your choice. Each 25-minute focus session is a pour; each break, a moment to breathe. Add your tasks, watch your session count grow, and let the rhythm of your brew keep you in flow. No account required, no ads, no distractions — just you and your work.</p>
+</section>
 </body>
 </html>
